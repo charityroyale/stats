@@ -1,0 +1,25 @@
+{
+  "name": "stats",
+  "version": "1.0.0",
+  "description": "A REST API to generate reports for Charity Royale streamers",
+  "scripts": {
+    "dev": "npx nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charityroyale/stats.git"
+  },
+  "author": "Patrick Obermüller",
+  "license": "MIT",
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "prettier": "^3.0.0"
+  }
+}

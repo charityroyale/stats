@@ -1,11 +1,12 @@
 {
-  "compilerOptions": {
-    "target": "ES2018",
-    "module": "commonjs",
-    "outDir": "dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true
-  },
-  "exclude": ["node_modules"]
+	"compilerOptions": {
+		"target": "ES2018",
+		"module": "commonjs",
+		"outDir": "dist",
+		"strict": true,
+		"esModuleInterop": true,
+		"noImplicitAny": true,
+		"skipLibCheck": true
+	},
+	"exclude": ["node_modules"]
 }

@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { createCanvas } from 'canvas'
+import { createCanvas, CanvasRenderingContext2D } from 'canvas'
 
 const app = express()
 const port = 3000
@@ -18,10 +18,10 @@ app.get('/', async (req: Request, res: Response) => {
 		}
 
 		// fetch maw data
-		const mawStreamers = (await fetchMakeAWishData()).streamers
+		const streamers = (await fetchMakeAWishData()).streamers
 
 		// process maw data by request param
-		const potentialStreamer = mawStreamers[req.query.streamername?.toString().toLowerCase() ?? '']
+		const potentialStreamer = streamers[req.query.streamername?.toString().toLowerCase() ?? '']
 		const type = req.query.type as Type // "instagram" | "twitter"
 		const streamerName = req.query.streamername?.toString()
 
@@ -31,11 +31,7 @@ app.get('/', async (req: Request, res: Response) => {
 		const ctx = canvas.getContext('2d')
 
 		// draw canvas
-		ctx.fillStyle = 'blue'
-		ctx.fillRect(0, 0, width, height)
-		ctx.fillStyle = 'white'
-		ctx.font = '48px serif'
-		ctx.fillText(streamerName, 10, 100)
+		draw(type, ctx, potentialStreamer)
 
 		// package canvas
 		const buffer = canvas.toBuffer('image/png')
@@ -60,6 +56,27 @@ const canvasSizeByType = (type: Type) => {
 			width: 1080,
 		}
 	}
+}
+
+const draw = (type: Type, ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
+	if (type === 'instagram') {
+		drawInstagram(ctx, streamer)
+	} else {
+		drawTwitter(ctx, streamer)
+	}
+}
+
+const drawInstagram = (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
+	throw new Error('drawInstagram not implemented')
+}
+
+const drawTwitter = (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
+	const { slug } = streamer
+	ctx.fillStyle = '#231565'
+	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+	ctx.fillStyle = 'white'
+	ctx.font = '48px serif'
+	ctx.fillText(slug, 10, 100)
 }
 
 /***************************

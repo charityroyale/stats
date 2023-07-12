@@ -12,23 +12,32 @@ app.listen(port, () => {
  ************/
 app.get('/', async (req: Request, res: Response) => {
 	try {
-		const streamers = (await fetchMakeAWishData()).streamers
-		const potentialStreamer = streamers[req.query.streamername?.toString().toLowerCase() ?? '']
+		// validate request data
+		if (typeof req.query.streamername !== 'string' || typeof req.query.type !== 'string') {
+			throw Error('"streamername" or "type" param invalid')
+		}
 
-		const width = 400
-		const height = 200
+		// fetch maw data
+		const mawStreamers = (await fetchMakeAWishData()).streamers
 
-		const streamerName = req.query.streamername?.toString() ?? 'YourLovelyNameHere'
+		// process maw data by request param
+		const potentialStreamer = mawStreamers[req.query.streamername?.toString().toLowerCase() ?? '']
+		const type = req.query.type as Type // "instagram" | "twitter"
+		const streamerName = req.query.streamername?.toString()
 
+		// prepare canvas
+		const { width, height } = canvasSizeByType(type)
 		const canvas = createCanvas(width, height)
 		const ctx = canvas.getContext('2d')
 
+		// draw canvas
 		ctx.fillStyle = 'blue'
 		ctx.fillRect(0, 0, width, height)
 		ctx.fillStyle = 'white'
 		ctx.font = '48px serif'
 		ctx.fillText(streamerName, 10, 100)
 
+		// package canvas
 		const buffer = canvas.toBuffer('image/png')
 		res.set('Content-Type', 'image/png')
 		res.send(buffer)
@@ -38,6 +47,21 @@ app.get('/', async (req: Request, res: Response) => {
 	}
 })
 
+type Type = 'instagram' | 'twitter'
+const canvasSizeByType = (type: Type) => {
+	if (type === 'instagram') {
+		return {
+			height: 1920,
+			width: 1080,
+		}
+	} else {
+		return {
+			height: 1080,
+			width: 1080,
+		}
+	}
+}
+
 /***************************
  * Make-A-Wish Austria API *
  ***************************/
@@ -46,10 +70,10 @@ const INFO_JSON_PATH = 'charityroyale2022/info.json'
 
 export const fetchMakeAWishData = async () => {
 	try {
-		const res = await fetch(`${MAKE_A_WISH_BASE_URL}/${INFO_JSON_PATH}`, {})
+		const res = await fetch(`${MAKE_A_WISH_BASE_URL}/${INFO_JSON_PATH}`)
 		return (await res.json()) as MakeAWishInfoJson
 	} catch (e) {
-		throw new Error(`Couldn't fetchMakeAWishData: ${e}`)
+		throw new Error(`Couldn't fetch MAW data: ${e}`)
 	}
 }
 

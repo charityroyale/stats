@@ -29,8 +29,7 @@ app.get('/', async (req: Request, res: Response) => {
 		const type = req.query.type as Type // "instagram" | "twitter"
 
 		console.log(path)
-		registerFont(path + '/font/roboto-bold.ttf', { family: 'Roboto', weight: 'bold' })
-		registerFont(path + '/font/roboto-medium.ttf', { family: 'Roboto', weight: 'regular' })
+		registerFont(path + '/font/roboto-medium.ttf', { family: 'Roboto' })
 		const streamerName = req.query.streamername?.toString()
 
 		// prepare canvas
@@ -82,7 +81,7 @@ const drawTwitter = (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer)
 	ctx.fillStyle = '#231565'
 	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 	ctx.fillStyle = 'white'
-	ctx.font = 'bold 48px Roboto'
+	ctx.font = '48px Roboto'
 	ctx.fillText(slug, 10, 100)
 	ctx.fillText(streamer.current_donation_sum_net, 10, 200)
 }

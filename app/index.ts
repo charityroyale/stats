@@ -1,11 +1,14 @@
 import express, { Request, Response } from 'express'
-import { createCanvas, CanvasRenderingContext2D } from 'canvas'
+import { createCanvas, Canvas, CanvasRenderingContext2D, registerFont } from 'canvas'
+import { infojson } from './info'
 
 const app = express()
 const port = 3000
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`)
 })
+
+const path = __dirname
 
 /************
  * CORE API *
@@ -18,18 +21,22 @@ app.get('/', async (req: Request, res: Response) => {
 		}
 
 		// fetch maw data
-		const streamers = (await fetchMakeAWishData()).streamers
+		// const streamers = (await fetchMakeAWishData()).streamers
+		const streamers = infojson.streamers as { [streamerSlug: string]: MakeAWishStreamer }
 
 		// process maw data by request param
 		const potentialStreamer = streamers[req.query.streamername?.toString().toLowerCase() ?? '']
 		const type = req.query.type as Type // "instagram" | "twitter"
+
+		console.log(path)
+		registerFont(path + '/font/roboto-bold.ttf', { family: 'Roboto', weight: 'bold' })
+		registerFont(path + '/font/roboto-medium.ttf', { family: 'Roboto', weight: 'regular' })
 		const streamerName = req.query.streamername?.toString()
 
 		// prepare canvas
 		const { width, height } = canvasSizeByType(type)
-		const canvas = createCanvas(width, height)
+		const canvas: Canvas = createCanvas(width, height)
 		const ctx = canvas.getContext('2d')
-
 		// draw canvas
 		draw(type, ctx, potentialStreamer)
 
@@ -75,8 +82,9 @@ const drawTwitter = (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer)
 	ctx.fillStyle = '#231565'
 	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 	ctx.fillStyle = 'white'
-	ctx.font = '48px serif'
+	ctx.font = 'bold 48px Roboto'
 	ctx.fillText(slug, 10, 100)
+	ctx.fillText(streamer.current_donation_sum_net, 10, 200)
 }
 
 /***************************

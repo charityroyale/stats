@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import { createCanvas, Canvas, CanvasRenderingContext2D, registerFont } from 'canvas'
+import { createCanvas, Canvas, CanvasRenderingContext2D, registerFont, loadImage } from 'canvas'
 import { infojson } from './info'
 
 const app = express()
@@ -28,7 +28,6 @@ app.get('/', async (req: Request, res: Response) => {
 		const potentialStreamer = streamers[req.query.streamername?.toString().toLowerCase() ?? '']
 		const type = req.query.type as Type // "instagram" | "twitter"
 
-		console.log(path)
 		registerFont(path + '/font/roboto-medium.ttf', { family: 'Roboto' })
 		const streamerName = req.query.streamername?.toString()
 
@@ -37,7 +36,7 @@ app.get('/', async (req: Request, res: Response) => {
 		const canvas: Canvas = createCanvas(width, height)
 		const ctx = canvas.getContext('2d')
 		// draw canvas
-		draw(type, ctx, potentialStreamer)
+		await draw(type, ctx, potentialStreamer)
 
 		// package canvas
 		const buffer = canvas.toBuffer('image/png')
@@ -64,11 +63,11 @@ const canvasSizeByType = (type: Type) => {
 	}
 }
 
-const draw = (type: Type, ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
+const draw = async (type: Type, ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
 	if (type === 'instagram') {
 		drawInstagram(ctx, streamer)
 	} else {
-		drawTwitter(ctx, streamer)
+		await drawTwitter(ctx, streamer)
 	}
 }
 
@@ -76,7 +75,7 @@ const drawInstagram = (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreame
 	throw new Error('drawInstagram not implemented')
 }
 
-const drawTwitter = (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
+const drawTwitter = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
 	const { slug } = streamer
 	ctx.fillStyle = '#231565'
 	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -84,6 +83,10 @@ const drawTwitter = (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer)
 	ctx.font = '48px Roboto'
 	ctx.fillText(slug, 10, 100)
 	ctx.fillText(streamer.current_donation_sum_net, 10, 200)
+
+	await loadImage(path + '/img/cr_logo.png').then((data) => {
+		ctx.drawImage(data, 100, 300)
+	})
 }
 
 /***************************

@@ -69,14 +69,66 @@ const canvasSizeByType = (type: Type) => {
 
 const draw = async (type: Type, ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
 	if (type === 'instagram') {
-		drawInstagram(ctx, streamer)
+		await drawInstagram(ctx, streamer)
 	} else {
 		await drawTwitter(ctx, streamer)
 	}
 }
 
-const drawInstagram = (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
-	throw new Error('drawInstagram not implemented')
+const drawInstagram = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
+	const { slug } = streamer
+
+	// Background
+	ctx.fillStyle = '#231565'
+	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+
+	// Headline
+	ctx.fillStyle = 'white'
+	ctx.font = '62px "Roboto"'
+	ctx.save()
+	ctx.translate(100, 400)
+	ctx.rotate(-Math.PI / 2)
+	ctx.textAlign = 'center'
+	ctx.fillText('Charity Royale STATS', 0, 0)
+	ctx.restore()
+
+	ctx.translate(ctx.canvas.width / 2, 0)
+
+	// Avatar
+	ctx.fillStyle = '#333'
+	ctx.fillRect(-150, 120, 300, 300)
+
+	// Headline Streamername
+	ctx.fillStyle = '#FFC439'
+	ctx.font = '112px "Roboto"'
+	ctx.textAlign = 'center'
+	ctx.fillText(slug.toUpperCase(), 0, 560)
+
+	// Spendensumme
+	drawStatsTitle(ctx, 0, 695, 'Spendensumme')
+	drawStatsValue(ctx, 0, 785, formatCurrency(streamer.current_donation_sum_net))
+
+	// Top Spender:in
+	drawStatsTitle(ctx, 0, 950, 'Top Spender:in')
+	drawStatsValue(
+		ctx,
+		0,
+		1030,
+		streamer.top_donors[0].username + ' ' + formatCurrency(streamer.top_donors[0].amount_net)
+	)
+
+	// Gesammelt für
+	drawStatsTitle(ctx, 0, 1200, 'Gesammelt für')
+	// TODO: add real values
+	drawStatsValue(ctx, 0, 1280, 'Max, Sissi, Flox, Adam, C.')
+
+	await loadImage(path + '/img/cr_logo.png').then((data) => {
+		ctx.drawImage(data, -400, ctx.canvas.height - 270, data.width * 0.9, data.height * 0.9)
+	})
+
+	await loadImage(path + '/img/maw_logo.png').then((data) => {
+		ctx.drawImage(data, 50, ctx.canvas.height - 240, data.width * 0.25, data.height * 0.25)
+	})
 }
 
 const drawTwitter = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {

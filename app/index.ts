@@ -1,9 +1,11 @@
+import 'dotenv/config'
 import express, { Request, Response } from 'express'
 import { createCanvas, Canvas, registerFont } from 'canvas'
 import { infojson } from './info'
 import { Type, canvasSizeByType } from './utils'
 import { draw } from './draw'
 import { MakeAWishStreamer } from './mawApiClient'
+import { fetchTwitchUser } from './twitch'
 
 const app = express()
 const port = 3000
@@ -23,6 +25,9 @@ app.get('/', async (req: Request, res: Response) => {
 
 		// process maw data by request param
 		const potentialStreamer = streamers[req.query.streamername?.toString().toLowerCase() ?? '']
+		const twitchUser = await fetchTwitchUser(req.query.streamername?.toString().toLowerCase() ?? '')
+
+		console.log(twitchUser)
 		const type = req.query.type as Type
 
 		const streamerName = req.query.streamername?.toString()

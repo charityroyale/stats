@@ -1,12 +1,17 @@
 {
 	"compilerOptions": {
-		"target": "ES2018",
-		"module": "commonjs",
+		"target": "es2016",
+		"module": "es6",
 		"outDir": "dist",
 		"strict": true,
 		"esModuleInterop": true,
 		"noImplicitAny": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"alwaysStrict": true,
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true
 	},
 	"exclude": ["node_modules"]
 }

@@ -27,7 +27,10 @@ app.get('/', async (req: Request, res: Response) => {
 		const potentialStreamer = streamers[req.query.streamername?.toString().toLowerCase() ?? '']
 		const twitchUser = await fetchTwitchUser(req.query.streamername?.toString().toLowerCase() ?? '')
 
-		downloadImage(twitchUser?.data[0].profile_image_url ?? '', `./app/img/${req.query.streamername?.toString()}.png`)
+		await downloadImage(
+			twitchUser?.data[0].profile_image_url ?? '',
+			`./app/img/${req.query.streamername?.toString()}.png`
+		)
 		const type = req.query.type as Type
 
 		// prepare canvas

@@ -57,6 +57,10 @@ const drawInstagram = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishS
 	await loadImage(__dirname + '/img/maw_logo.png').then((data) => {
 		ctx.drawImage(data, 50, ctx.canvas.height - 240, data.width * 0.25, data.height * 0.25)
 	})
+
+	await loadImage(__dirname + '/img/' + `${streamer.slug}.png`).then((data) => {
+		ctx.drawImage(data, -150, 120, 300, 300)
+	})
 }
 
 const drawTwitter = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {

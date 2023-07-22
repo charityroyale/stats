@@ -5,7 +5,7 @@ import { infojson } from './info'
 import { Type, canvasSizeByType } from './utils'
 import { draw } from './draw'
 import { MakeAWishStreamer } from './mawApiClient'
-import { fetchTwitchUser } from './twitch'
+import { downloadImage, fetchTwitchUser } from './twitch'
 
 const app = express()
 const port = 3000
@@ -27,10 +27,8 @@ app.get('/', async (req: Request, res: Response) => {
 		const potentialStreamer = streamers[req.query.streamername?.toString().toLowerCase() ?? '']
 		const twitchUser = await fetchTwitchUser(req.query.streamername?.toString().toLowerCase() ?? '')
 
-		console.log(twitchUser)
+		downloadImage(twitchUser?.data[0].profile_image_url ?? '', `./app/img/${req.query.streamername?.toString()}.png`)
 		const type = req.query.type as Type
-
-		const streamerName = req.query.streamername?.toString()
 
 		// prepare canvas
 		const { width, height } = canvasSizeByType(type)

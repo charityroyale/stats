@@ -1,3 +1,5 @@
+import * as fs from 'fs'
+
 export const fetchTwitchUser = async (loginName: string) => {
 	try {
 		const res = await fetch(`https://api.twitch.tv/helix/users?login=${loginName}`, {
@@ -32,4 +34,20 @@ export class TwitchUserDTO {
 	public profile_image_url = ''
 	public offline_image_url = ''
 	public view_count = -1
+}
+
+export const downloadImage = async (imageUrl: string, outputPath: string = './downloaded-image.jpg'): Promise<void> => {
+	try {
+		const response = await fetch(imageUrl)
+
+		if (!response.ok) {
+			throw new Error('Failed to download image. Invalid response from server.')
+		}
+
+		const arrayBuffer = await response.arrayBuffer()
+		fs.writeFileSync(outputPath, Buffer.from(arrayBuffer))
+		console.log('Image downloaded successfully.')
+	} catch (error) {
+		console.error('Error occurred while downloading the image:', error)
+	}
 }

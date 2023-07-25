@@ -38,7 +38,7 @@ see [.env.example](.env.example)
 > ```
 > curl -X POST \
 >  -H "Content-Type: application/x-www-form-urlencoded" \
->  -d "client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRETgrant_type=client_credentials" \
+>  -d "client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&grant_type=client_credentials" \
 >  https://id.twitch.tv/oauth2/token
 > ```
 

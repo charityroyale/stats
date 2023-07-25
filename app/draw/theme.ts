@@ -1,3 +1,5 @@
+import { IMG_PATH } from '../config'
+
 export const PURPLE = '#231565'
 export const WHITE = 'white'
 export const GOLD = '#FFC439'
@@ -8,7 +10,5 @@ export const TEXT_SUM_OF_DONATIONS_TITLE = 'Spendensumme'
 export const TEXT_TOP_DONATO_TITLE = 'Top Spender:in'
 export const TEXT_COLLECTED_FOR_TITLE = 'Gesammelt für'
 
-export const IMAGE_PATH_CR_LOGO = `${__dirname}/img/cr_logo.png`
-export const IMAGE_PATH_MAW_LOGO = `${__dirname}/img/maw_logo.png`
-
-export const FONT_PATH_ROBOTO = `${__dirname}/font/Roboto-Medium.ttf`
+export const IMAGE_PATH_CR_LOGO = `${IMG_PATH}/cr_logo.png`
+export const IMAGE_PATH_MAW_LOGO = `${IMG_PATH}/maw_logo.png`

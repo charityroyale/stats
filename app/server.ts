@@ -1,13 +1,13 @@
 import 'dotenv/config'
 import express, { Request, Response } from 'express'
-import { createCanvas, Canvas, registerFont } from 'canvas'
-import { infojson } from './info'
-import { Type, canvasSizeByType, getCanvasContextByType, validateRequestParams } from './utils'
-import { draw } from './draw'
-import { MakeAWishStreamer } from './mawApiClient'
-import { downloadAndSaveImageFromUrl, fetchTwitchUser } from './twitch'
-import { FONT_PATH } from './config'
+import { registerFont } from 'canvas'
+import { draw } from './src/draw/draw'
+import { MakeAWishStreamer } from './src/apiClients/mawApiClient'
+import { FONT_PATH } from './src/config'
 import { logger } from './logger'
+import { fetchTwitchUser, downloadAndSaveImageFromUrl } from './src/apiClients/twitchApiClient'
+import { infojson } from './src/info'
+import { Type, validateRequestParams } from './src/utils'
 
 const app = express()
 const port = 3000

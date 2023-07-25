@@ -1,7 +1,8 @@
 import { Canvas, createCanvas } from 'canvas'
-import { logger } from './logger'
-import { StatsRequestParams } from './server'
 import { Response } from 'express'
+import { logger } from '../logger'
+import { StatsRequestParams } from '../server'
+import { MakeAWishStreamer } from './apiClients/mawApiClient'
 
 export type Type = 'instagram' | 'twitter'
 export const canvasSizeByType = (type: Type) => {
@@ -31,6 +32,14 @@ export const currencyFormatter = Intl.NumberFormat('de-AT', {
 
 export const formatCurrency = (money: string) => {
 	return currencyFormatter.format(parseFloat(money))
+}
+
+export const formatUserWithAmount = (streamer: MakeAWishStreamer) => {
+	if (!streamer.top_donors || streamer.top_donors.length < 0) {
+		logger.info(`Streamer with slug "${streamer.slug}" does not have any donors in list "top_donors".`)
+		return '-'
+	}
+	return streamer.top_donors[0].username + ' ' + formatCurrency(streamer.top_donors[0].amount_net)
 }
 
 export const validateRequestParams = (params: StatsRequestParams, res: Response) => {

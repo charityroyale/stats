@@ -43,7 +43,7 @@ app.get('/:streamer/:type', async (req: StatsRequest, res: Response) => {
 		logger.info(`Created stats for "${req.url}"! Yey!`)
 	} catch (error) {
 		console.log(error)
-		logger.info(`Couldn't process request "${req.url}" successfully because "${error}".`)
+		logger.error(`Couldn't process request "${req.url}" successfully because "${error}".`)
 		res.status(500).send('The request caused an internal server error.')
 	}
 })

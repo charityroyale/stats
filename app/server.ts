@@ -2,52 +2,48 @@ import 'dotenv/config'
 import express, { Request, Response } from 'express'
 import { createCanvas, Canvas, registerFont } from 'canvas'
 import { infojson } from './info'
-import { Type, canvasSizeByType } from './utils'
+import { Type, canvasSizeByType, getCanvasContextByType, validateRequestParams } from './utils'
 import { draw } from './draw'
 import { MakeAWishStreamer } from './mawApiClient'
-import { downloadImage, fetchTwitchUser } from './twitch'
+import { downloadAndSaveImageFromUrl, fetchTwitchUser } from './twitch'
+import { FONT_PATH } from './config'
+import { logger } from './logger'
 
 const app = express()
 const port = 3000
 
 app.listen(port, () => {
-	console.log(`Server is running on port ${port}`)
+	logger.info(`Server started on port ${port}`)
+	registerFont(`${FONT_PATH}/roboto-medium.ttf`, { family: 'Roboto' })
 })
 
-app.get('/', async (req: Request, res: Response) => {
+export type StatsRequestParams = { streamer: string; type: Type }
+type StatsRequest = Request<StatsRequestParams>
+
+app.get('/:streamer/:type', async (req: StatsRequest, res: Response) => {
+	logger.info(`New "${req.method}" request from "${req.ip}" via url "${req.url}"`)
+
 	try {
-		if (typeof req.query.streamername !== 'string' || typeof req.query.type !== 'string') {
-			throw Error('"streamername" or "type" param invalid')
-		}
+		const { params } = req
+		validateRequestParams(params, res)
 
+		const { streamer, type } = params
 		// const streamers = (await fetchMakeAWishData()).streamers
-		const streamers = infojson.streamers as { [streamerSlug: string]: MakeAWishStreamer }
+		const mawStreamers = infojson.streamers as { [streamerSlug: string]: MakeAWishStreamer }
 
-		// process maw data by request param
-		const potentialStreamer = streamers[req.query.streamername?.toString().toLowerCase() ?? '']
-		const twitchUser = await fetchTwitchUser(req.query.streamername?.toString().toLowerCase() ?? '')
+		const twitchUser = await fetchTwitchUser(streamer)
+		await downloadAndSaveImageFromUrl(twitchUser?.data[0].profile_image_url ?? '', streamer)
 
-		await downloadImage(
-			twitchUser?.data[0].profile_image_url ?? '',
-			`./app/img/${req.query.streamername?.toString()}.png`
-		)
-		const type = req.query.type as Type
-
-		// prepare canvas
-		const { width, height } = canvasSizeByType(type)
-		const canvas: Canvas = createCanvas(width, height)
-		const ctx = canvas.getContext('2d')
-		registerFont(__dirname + '/font/Roboto-Medium.ttf', { family: 'Roboto' })
-
-		// draw canvas
-		await draw(type, ctx, potentialStreamer)
-
-		// package canvas
+		const canvas = await draw(type, mawStreamers[streamer])
 		const buffer = canvas.toBuffer('image/png')
+
 		res.set('Content-Type', 'image/png')
 		res.send(buffer)
-	} catch (err) {
-		console.error(err)
-		res.status(500).send('An error occurred')
+
+		logger.info(`Created stats for "${req.url}"! Yey!`)
+	} catch (error) {
+		console.log(error)
+		logger.info(`Couldn't successfull process request "${req.url}" because "${error}".`)
+		res.status(500).send('The request caused an internal server error.')
 	}
 })

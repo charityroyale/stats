@@ -1,14 +1,17 @@
 import { loadImage, CanvasRenderingContext2D } from 'canvas'
 import { PURPLE, WHITE, DARKGRAY, GOLD } from './theme'
-import { Type, formatCurrency } from './utils'
+import { Type, formatCurrency, getCanvasContextByType } from './utils'
 import { MakeAWishStreamer } from './mawApiClient'
+import { IMG_DOWNLOADS_PATH, IMG_PATH } from './config'
 
-export const draw = async (type: Type, ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
+export const draw = async (type: Type, streamer: MakeAWishStreamer) => {
+	const ctx = getCanvasContextByType(type)
 	if (type === 'instagram') {
 		await drawInstagram(ctx, streamer)
 	} else {
 		await drawTwitter(ctx, streamer)
 	}
+	return ctx.canvas
 }
 
 const drawInstagram = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
@@ -50,12 +53,16 @@ const drawInstagram = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishS
 	// Gesammelt für
 	drawStats(ctx, 0, 1200, 'Gesammelt für', 'Max, Sissi, Flox, Adam, C.', 38, 68)
 
-	await loadImage(__dirname + '/img/cr_logo.png').then((data) => {
+	await loadImage(`${IMG_PATH}/cr_logo.png`).then((data) => {
 		ctx.drawImage(data, -400, ctx.canvas.height - 270, data.width * 0.9, data.height * 0.9)
 	})
 
-	await loadImage(__dirname + '/img/maw_logo.png').then((data) => {
+	await loadImage(`${IMG_PATH}/maw_logo.png`).then((data) => {
 		ctx.drawImage(data, 50, ctx.canvas.height - 240, data.width * 0.25, data.height * 0.25)
+	})
+
+	await loadImage(`${IMG_DOWNLOADS_PATH}/${streamer.slug}.png`).then((data) => {
+		ctx.drawImage(data, -150, 120, 300, 300)
 	})
 }
 
@@ -89,12 +96,16 @@ const drawTwitter = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishStr
 	// Gesammelt für
 	drawStats(ctx, 100, 700, 'Gesammelt für', 'Max, Sissi, Flox, Adam, C.', 38, 68)
 
-	await loadImage(__dirname + '/img/cr_logo.png').then((data) => {
+	await loadImage(`${IMG_PATH}/cr_logo.png`).then((data) => {
 		ctx.drawImage(data, 90, ctx.canvas.height - 190, data.width * 0.7, data.height * 0.7)
 	})
 
-	await loadImage(__dirname + '/img/maw_logo.png').then((data) => {
+	await loadImage(`${IMG_PATH}/maw_logo.png`).then((data) => {
 		ctx.drawImage(data, ctx.canvas.width - 400, ctx.canvas.height - 170, data.width * 0.2, data.height * 0.2)
+	})
+
+	await loadImage(`${IMG_DOWNLOADS_PATH}/${streamer.slug}.png`).then((data) => {
+		ctx.drawImage(data, 100, 70, 220, 220)
 	})
 }
 

@@ -6,7 +6,12 @@
 		"strict": true,
 		"esModuleInterop": true,
 		"noImplicitAny": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"alwaysStrict": true,
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true
 	},
 	"exclude": ["node_modules"]
 }

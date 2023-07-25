@@ -26,7 +26,7 @@ export const downloadAndSaveImageFromUrl = async (
 		return
 	}
 
-	const destination = `${outputPath}/${outputFileName}`
+	const destination = `${outputPath}/${outputFileName}.png`
 	if (fs.existsSync(destination)) {
 		logger.info(`Canceling image download. The following file already exists: "${destination}"`)
 		return

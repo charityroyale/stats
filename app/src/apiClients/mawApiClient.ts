@@ -1,8 +1,4 @@
-/***************************
- * Make-A-Wish Austria API *
- ***************************/
-const MAKE_A_WISH_BASE_URL = 'https://streamer.make-a-wish.at'
-const INFO_JSON_PATH = 'charityroyale2022/info.json'
+import { MAKE_A_WISH_BASE_URL, INFO_JSON_PATH } from '../config'
 
 export const fetchMakeAWishData = async () => {
 	try {

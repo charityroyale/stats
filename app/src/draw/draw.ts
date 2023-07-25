@@ -1,5 +1,5 @@
 import { Type, getCanvasContextByType } from '../utils'
-import { MakeAWishStreamer } from '../mawApiClient'
+import { MakeAWishStreamer } from '../apiClients/mawApiClient'
 import { drawInstagram } from './instagram'
 import { drawTwitter } from './twitter'
 

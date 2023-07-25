@@ -1,6 +1,6 @@
 import * as fs from 'fs'
-import { IMG_DOWNLOADS_PATH } from './config'
-import { logger } from './logger'
+import { logger } from '../../logger'
+import { IMG_DOWNLOADS_PATH } from '../config'
 
 export const fetchTwitchUser = async (loginName: string) => {
 	const res = await fetch(`https://api.twitch.tv/helix/users?login=${loginName}`, {

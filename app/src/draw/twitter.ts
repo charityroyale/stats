@@ -1,6 +1,6 @@
 import { loadImage } from 'canvas'
 import { IMG_DOWNLOADS_PATH } from '../config'
-import { MakeAWishStreamer } from '../mawApiClient'
+import { MakeAWishStreamer } from '../apiClients/mawApiClient'
 import { formatCurrency, formatUserWithAmount } from '../utils'
 import {
 	HEADING,

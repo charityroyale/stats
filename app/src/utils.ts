@@ -1,8 +1,8 @@
 import { Canvas, createCanvas } from 'canvas'
-import { logger } from './logger'
-import { StatsRequestParams } from './server'
 import { Response } from 'express'
-import { MakeAWishStreamer } from './mawApiClient'
+import { logger } from '../logger'
+import { StatsRequestParams } from '../server'
+import { MakeAWishStreamer } from './apiClients/mawApiClient'
 
 export type Type = 'instagram' | 'twitter'
 export const canvasSizeByType = (type: Type) => {

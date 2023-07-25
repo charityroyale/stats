@@ -1,6 +1,6 @@
 import { loadImage, CanvasRenderingContext2D } from 'canvas'
 import { PURPLE, WHITE, DARKGRAY, GOLD } from './theme'
-import { Type, formatCurrency, getCanvasContextByType } from './utils'
+import { Type, formatCurrency, formatUserWithAmount, getCanvasContextByType } from './utils'
 import { MakeAWishStreamer } from './mawApiClient'
 import { IMG_DOWNLOADS_PATH, IMG_PATH } from './config'
 
@@ -43,14 +43,8 @@ const drawInstagram = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishS
 	ctx.textAlign = 'center'
 	ctx.fillText(slug.toUpperCase(), 0, 560)
 
-	// Spendensumme
 	drawStats(ctx, 0, 695, 'Spendensumme', formatCurrency(streamer.current_donation_sum_net), 38, 68)
-
-	// Top Spender:in
-	const valueText = streamer.top_donors[0].username + ' ' + formatCurrency(streamer.top_donors[0].amount_net)
-	drawStats(ctx, 0, 950, 'Top Spender:in', valueText, 38, 68)
-
-	// Gesammelt für
+	drawStats(ctx, 0, 950, 'Top Spender:in', formatUserWithAmount(streamer), 38, 68)
 	drawStats(ctx, 0, 1200, 'Gesammelt für', 'Max, Sissi, Flox, Adam, C.', 38, 68)
 
 	await loadImage(`${IMG_PATH}/cr_logo.png`).then((data) => {
@@ -86,14 +80,8 @@ const drawTwitter = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishStr
 	ctx.font = '112px "Roboto"'
 	ctx.fillText(slug.toUpperCase(), 370, 260)
 
-	// Spendensumme
 	drawStats(ctx, 100, 395, 'Spendensumme', formatCurrency(streamer.current_donation_sum_net), 38, 68)
-
-	// Top Spender:in
-	const valueText = streamer.top_donors[0].username + ' ' + formatCurrency(streamer.top_donors[0].amount_net)
-	drawStats(ctx, 100, 545, 'Top Spender:in', valueText, 38, 68)
-
-	// Gesammelt für
+	drawStats(ctx, 100, 545, 'Top Spender:in', formatUserWithAmount(streamer), 38, 68)
 	drawStats(ctx, 100, 700, 'Gesammelt für', 'Max, Sissi, Flox, Adam, C.', 38, 68)
 
 	await loadImage(`${IMG_PATH}/cr_logo.png`).then((data) => {

@@ -3,7 +3,8 @@
 	"version": "1.0.0",
 	"description": "A REST API to generate reports for Charity Royale streamers",
 	"scripts": {
-		"dev": "npx nodemon"
+		"dev": "npx nodemon",
+		"start": "npx nodemon"
 	},
 	"repository": {
 		"type": "git",

@@ -45,3 +45,11 @@ see [.env.example](.env.example)
 ### avatar retrieval
 
 https://dev.twitch.tv/docs/api/reference/#get-users
+
+### docker
+
+docker build -t stats .  
+docker run -p 6200:3000 stats
+
+docker-compose up --build  
+docker-compose up -d

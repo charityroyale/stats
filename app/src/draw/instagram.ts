@@ -1,32 +1,23 @@
 import { loadImage, CanvasRenderingContext2D } from 'canvas'
 import { IMG_DOWNLOADS_PATH } from '../config'
-import { MakeAWishStreamer } from '../apiClients/mawApiClient'
-import { formatCurrency, formatUserWithAmount } from '../utils'
-import {
-	HEADING,
-	SUM_TITLE,
-	TOP_DONORS_TITLE,
-	WISHES_TITLE,
-	drawAvatarBackground,
-	drawBackground,
-	drawStats,
-} from './drawUtils'
+import { formatCurrency, formatUserWithAmount, formatWishes } from '../utils'
+import { HEADING, SUM_TITLE, TOP_DONORS_TITLE, WISHES_TITLE, drawBackground, drawStats } from './drawUtils'
 import { WHITE, GOLD, IMAGE_PATH_MAW_LOGO, IMAGE_PATH_CR_LOGO } from './theme'
+import { MakeAWishStreamerDataResponse } from '../apiClients/mawApiClient'
 
-export const drawInstagram = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamer) => {
-	const { slug } = streamer
+export const drawInstagram = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamerDataResponse) => {
+	const { slug, current_donation_sum_net } = streamer.streamer
 
 	drawBackground(ctx)
-	drawAvatarBackground(ctx, -150, 120, 300, 300)
 	drawHeading(ctx)
 
 	setOriginXToCenter(ctx)
 
 	drawStreamerName(ctx, slug.toUpperCase())
 
-	drawStats(ctx, 0, 695, SUM_TITLE, formatCurrency(streamer.current_donation_sum_net), 38, 68)
-	drawStats(ctx, 0, 950, TOP_DONORS_TITLE, formatUserWithAmount(streamer), 38, 68)
-	drawStats(ctx, 0, 1200, WISHES_TITLE, 'Max, Sissi, Flox, Adam, C.', 38, 68)
+	drawStats(ctx, 0, 695, SUM_TITLE, formatCurrency(current_donation_sum_net), 38, 68)
+	drawStats(ctx, 0, 950, TOP_DONORS_TITLE, formatUserWithAmount(streamer.streamer), 38, 68)
+	drawStats(ctx, 0, 1200, WISHES_TITLE, formatWishes(streamer.wishes), 38, 68)
 
 	await loadImage(IMAGE_PATH_CR_LOGO).then((data) => {
 		ctx.drawImage(data, -400, ctx.canvas.height - 270, data.width * 0.9, data.height * 0.9)
@@ -36,7 +27,7 @@ export const drawInstagram = async (ctx: CanvasRenderingContext2D, streamer: Mak
 		ctx.drawImage(data, 50, ctx.canvas.height - 240, data.width * 0.25, data.height * 0.25)
 	})
 
-	await loadImage(`${IMG_DOWNLOADS_PATH}/${streamer.slug}.png`).then((data) => {
+	await loadImage(`${IMG_DOWNLOADS_PATH}/${slug}.png`).then((data) => {
 		ctx.drawImage(data, -150, 120, 300, 300)
 	})
 }

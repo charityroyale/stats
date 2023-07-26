@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  stats:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: charityroyale/stats
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.charityroyale-stats.rule=Host(`stats.redcouch.at`)"
+      - "traefik.http.routers.charityroyale-stats.entrypoints=websecure"
+      - "traefik.http.routers.charityroyale-stats.tls.certresolver=myresolver"
+    networks:
+      internal:
+    restart: always
+
+networks:
+  internal:
+    external:
+      name: paddy_internal

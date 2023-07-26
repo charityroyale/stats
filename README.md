@@ -50,3 +50,6 @@ https://dev.twitch.tv/docs/api/reference/#get-users
 
 docker build -t stats .  
 docker run -p 6200:3000 stats
+
+docker-compose up --build  
+docker-compose up -d

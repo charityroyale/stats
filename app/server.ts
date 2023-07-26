@@ -28,12 +28,12 @@ app.get('/:streamer/:type', async (req: StatsRequest, res: Response) => {
 		validateRequestParams(params, res)
 
 		const { streamer, type } = params
-		const mawStreamers = (await fetchMakeAWishData()).streamers
+		const mawStreamerData = await fetchMakeAWishData(streamer)
 
 		const twitchUser = await fetchTwitchUser(streamer)
 		await downloadAndSaveImageFromUrl(twitchUser?.data[0].profile_image_url ?? '', streamer)
 
-		const canvas = await draw(type, mawStreamers[streamer])
+		const canvas = await draw(type, mawStreamerData)
 		const buffer = canvas.toBuffer('image/png')
 
 		res.set('Content-Type', 'image/png')

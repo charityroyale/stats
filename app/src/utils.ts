@@ -2,7 +2,7 @@ import { Canvas, createCanvas } from 'canvas'
 import { Response } from 'express'
 import { logger } from '../logger'
 import { StatsRequestParams } from '../server'
-import { MakeAWishStreamer } from './apiClients/mawApiClient'
+import { MakeAWishStreamer, MakeAWishStreamerWish } from './apiClients/mawApiClient'
 
 export type Type = 'instagram' | 'twitter'
 export const canvasSizeByType = (type: Type) => {
@@ -50,4 +50,16 @@ export const validateRequestParams = (params: StatsRequestParams, res: Response)
 			result: `Validation failed for "${JSON.stringify(params)}"`,
 		})
 	}
+}
+
+export const formatWishes = (wishes: { [wishSlug: string]: MakeAWishStreamerWish }) => {
+	if (Object.keys(wishes).length < 1) {
+		return '-'
+	}
+
+	const kidNames = Object.keys(wishes)
+		.map((key) => wishes[key].kid_name)
+		.join(', ')
+
+	return kidNames.slice(0, kidNames.lastIndexOf(', '))
 }

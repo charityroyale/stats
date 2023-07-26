@@ -29,5 +29,3 @@ export const drawBackground = (ctx: CanvasRenderingContext2D) => {
 	ctx.fillStyle = PURPLE
 	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 }
-
-export const drawAvatarBackground = (ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) => {}

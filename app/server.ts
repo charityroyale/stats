@@ -2,7 +2,7 @@ import 'dotenv/config'
 import express, { Request, Response } from 'express'
 import { registerFont } from 'canvas'
 import { draw } from './src/draw/draw'
-import { MakeAWishStreamer } from './src/apiClients/mawApiClient'
+import { MakeAWishStreamer, fetchMakeAWishData } from './src/apiClients/mawApiClient'
 import { FONT_PATH } from './src/config'
 import { logger } from './logger'
 import { fetchTwitchUser, downloadAndSaveImageFromUrl } from './src/apiClients/twitchApiClient'
@@ -28,8 +28,7 @@ app.get('/:streamer/:type', async (req: StatsRequest, res: Response) => {
 		validateRequestParams(params, res)
 
 		const { streamer, type } = params
-		// const streamers = (await fetchMakeAWishData()).streamers
-		const mawStreamers = infojson.streamers as { [streamerSlug: string]: MakeAWishStreamer }
+		const mawStreamers = (await fetchMakeAWishData()).streamers
 
 		const twitchUser = await fetchTwitchUser(streamer)
 		await downloadAndSaveImageFromUrl(twitchUser?.data[0].profile_image_url ?? '', streamer)

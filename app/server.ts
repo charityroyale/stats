@@ -10,7 +10,7 @@ import { infojson } from './src/info'
 import { Type, validateRequestParams } from './src/utils'
 
 const app = express()
-const port = 3000
+const port = 6200
 
 app.listen(port, () => {
 	logger.info(`Server started on port ${port}`)

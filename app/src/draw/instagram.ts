@@ -5,6 +5,10 @@ import { HEADING, SUM_TITLE, TOP_DONORS_TITLE, WISHES_TITLE, drawBackground, dra
 import { WHITE, GOLD, IMAGE_PATH_MAW_LOGO, IMAGE_PATH_CR_LOGO } from './theme'
 import { MakeAWishStreamerDataResponse } from '../apiClients/mawApiClient'
 
+const fontSizeStatsTitleValues = 52
+const fontSizeStatsTextValues = 72
+
+const statsGap = 84
 export const drawInstagram = async (ctx: CanvasRenderingContext2D, streamer: MakeAWishStreamerDataResponse) => {
 	const { slug, current_donation_sum_net } = streamer.streamer
 
@@ -15,9 +19,36 @@ export const drawInstagram = async (ctx: CanvasRenderingContext2D, streamer: Mak
 
 	drawStreamerName(ctx, slug.toUpperCase())
 
-	drawStats(ctx, 0, 695, SUM_TITLE, formatCurrency(current_donation_sum_net), 38, 68)
-	drawStats(ctx, 0, 950, TOP_DONORS_TITLE, formatUserWithAmount(streamer.streamer), 38, 68)
-	drawStats(ctx, 0, 1200, WISHES_TITLE, formatWishes(streamer.wishes), 38, 68)
+	drawStats(
+		ctx,
+		0,
+		695,
+		SUM_TITLE,
+		formatCurrency(current_donation_sum_net),
+		fontSizeStatsTitleValues,
+		fontSizeStatsTextValues,
+		statsGap
+	)
+	drawStats(
+		ctx,
+		0,
+		950,
+		TOP_DONORS_TITLE,
+		formatUserWithAmount(streamer.streamer),
+		fontSizeStatsTitleValues,
+		fontSizeStatsTextValues,
+		statsGap
+	)
+	drawStats(
+		ctx,
+		0,
+		1200,
+		WISHES_TITLE,
+		formatWishes(streamer.wishes),
+		fontSizeStatsTitleValues,
+		fontSizeStatsTextValues,
+		statsGap
+	)
 
 	await loadImage(IMAGE_PATH_CR_LOGO).then((data) => {
 		ctx.drawImage(data, -400, ctx.canvas.height - 270, data.width * 0.9, data.height * 0.9)

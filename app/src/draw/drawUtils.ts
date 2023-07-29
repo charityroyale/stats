@@ -7,14 +7,17 @@ export const SUM_TITLE = 'Spendensumme'
 export const TOP_DONORS_TITLE = 'Top Spender:in'
 export const WISHES_TITLE = 'Gesammelt für'
 
+const defaultGap = 68
 export const drawStats = (
 	ctx: CanvasRenderingContext2D,
 	x: number,
 	y: number,
 	title: string,
-	value: string,
+	text: string,
 	titleFontSize: number,
-	valueFontSize: number
+	valueFontSize: number,
+	gap: number = defaultGap,
+	threshold: number = 200
 ) => {
 	ctx.fillStyle = WHITE
 	ctx.font = `${titleFontSize}px Roboto`
@@ -22,7 +25,30 @@ export const drawStats = (
 
 	ctx.fillStyle = GOLD
 	ctx.font = `${valueFontSize}px Roboto`
-	ctx.fillText(value, x, y + 90)
+
+	// Draw multiple lines of text content that contains ", "
+	// and is exceeding max width threshold
+	if (ctx.measureText(text).width > ctx.canvas.width - threshold && text.includes(', ')) {
+		const lineTexts = text.split(', ')
+
+		let textBlockRows = []
+		let textToDraw = ''
+
+		for (let i = 0; i < lineTexts.length; i++) {
+			if (ctx.measureText(textToDraw).width >= ctx.canvas.width - threshold) {
+				textBlockRows.push(textToDraw)
+				textToDraw = ''
+			}
+			textToDraw += lineTexts[i] + ', '
+		}
+		textBlockRows.push(textToDraw.slice(0, textToDraw.lastIndexOf(', ')))
+
+		for (let j = 0; j < textBlockRows.length; j++) {
+			ctx.fillText(textBlockRows[j], x, y + gap * (j + 1))
+		}
+	} else {
+		ctx.fillText(text, x, y + gap)
+	}
 }
 
 export const drawBackground = (ctx: CanvasRenderingContext2D) => {

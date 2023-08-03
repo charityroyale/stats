@@ -43,7 +43,7 @@ export const formatUserWithAmount = (streamer: MakeAWishStreamer) => {
 }
 
 export const hasValidRequestParams = (params: StatsRequestParams) => {
-	return !params.streamer || params.streamer.length < 0 || (params.type !== 'instagram' && params.type !== 'twitter')
+	return !params.streamer || params.streamer.length < 0 || !(params.type !== 'instagram' && params.type !== 'twitter')
 }
 
 export const formatWishes = (wishes: { [wishSlug: string]: MakeAWishStreamerWish }) => {

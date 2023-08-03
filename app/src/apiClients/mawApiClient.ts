@@ -18,7 +18,7 @@ export interface MakeAWishStreamerWish {
 	id: number // some MAW internal ID
 	color: string // some MAW internal color code
 	slug: string // identifier
-	kid_name: string
+	kid_name: string | null
 	wish: string // MAW internal title of wish
 	donation_goal: string
 	country: string // DE | AT

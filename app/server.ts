@@ -26,7 +26,7 @@ app.get('/:streamer/:type', async (req: StatsRequest, res: Response) => {
 	try {
 		const { params } = req
 		if (!hasValidRequestParams(params)) {
-			logger.error(`Invalid params for request "${params}". Returning HTTP 400 response.`)
+			logger.error(`Invalid params for request "${JSON.stringify(params)}". Returning HTTP 400 response.`)
 			return res.status(400).send({
 				status: 400,
 				result: `Validation failed for "${JSON.stringify(params)}"`,

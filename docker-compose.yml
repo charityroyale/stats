@@ -8,7 +8,7 @@ services:
     image: charityroyale/stats
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.charityroyale-stats.rule=Host(`stats.redcouch.at`)"
+      - "traefik.http.routers.charityroyale-stats.rule=Host(`stats.hammertime.studio`)"
       - "traefik.http.routers.charityroyale-stats.entrypoints=websecure"
       - "traefik.http.routers.charityroyale-stats.tls.certresolver=myresolver"
     networks:

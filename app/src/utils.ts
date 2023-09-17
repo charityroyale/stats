@@ -39,17 +39,11 @@ export const formatUserWithAmount = (streamer: MakeAWishStreamer) => {
 		logger.info(`Streamer with slug "${streamer.slug}" does not have any donors in list "top_donors".`)
 		return '-'
 	}
-	return streamer.top_donors[0].username + ' ' + formatCurrency(streamer.top_donors[0].amount_net)
+	return streamer.top_donors[0].username
 }
 
-export const validateRequestParams = (params: StatsRequestParams, res: Response) => {
-	if (!params.streamer || params.streamer.length < 0 || (params.type !== 'instagram' && params.type !== 'twitter')) {
-		logger.error(`Invalid params for request "${params}". Returning HTTP 400 response.`)
-		return res.status(400).send({
-			status: 400,
-			result: `Validation failed for "${JSON.stringify(params)}"`,
-		})
-	}
+export const hasValidRequestParams = (params: StatsRequestParams) => {
+	return !params.streamer || params.streamer.length < 0 || !(params.type !== 'instagram' && params.type !== 'twitter')
 }
 
 export const formatWishes = (wishes: { [wishSlug: string]: MakeAWishStreamerWish }) => {
@@ -57,9 +51,12 @@ export const formatWishes = (wishes: { [wishSlug: string]: MakeAWishStreamerWish
 		return '-'
 	}
 
-	const kidNames = Object.keys(wishes)
-		.map((key) => wishes[key].kid_name)
-		.join(', ')
+	const wishKeys = Object.keys(wishes)
+	if (wishKeys.length === 1) {
+		return wishes[wishKeys[0]].kid_name ?? wishes[wishKeys[0]].wish
+	}
+
+	const kidNames = wishKeys.map((key) => wishes[key].kid_name).join(', ')
 
 	return kidNames.slice(0, kidNames.lastIndexOf(', '))
 }

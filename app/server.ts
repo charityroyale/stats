@@ -7,7 +7,7 @@ import { FONT_PATH } from './src/config'
 import { logger } from './logger'
 import { fetchTwitchUser, downloadAndSaveImageFromUrl } from './src/apiClients/twitchApiClient'
 import { infojson } from './src/info'
-import { Type, validateRequestParams } from './src/utils'
+import { Type, hasValidRequestParams } from './src/utils'
 
 const app = express()
 const port = 6200
@@ -25,7 +25,13 @@ app.get('/:streamer/:type', async (req: StatsRequest, res: Response) => {
 
 	try {
 		const { params } = req
-		validateRequestParams(params, res)
+		if (!hasValidRequestParams(params)) {
+			logger.error(`Invalid params for request "${JSON.stringify(params)}". Returning HTTP 400 response.`)
+			return res.status(400).send({
+				status: 400,
+				result: `Validation failed for "${JSON.stringify(params)}"`,
+			})
+		}
 
 		const { streamer, type } = params
 		const mawStreamerData = await fetchMakeAWishData(streamer)

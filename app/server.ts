@@ -7,6 +7,7 @@ import { FONT_PATH } from './src/config'
 import { logger } from './logger'
 import { fetchTwitchUser, downloadAndSaveImageFromUrl, fetchLiveChannels } from './src/apiClients/twitchApiClient'
 import { Type, hasValidRequestParams } from './src/utils'
+import cors from 'cors'
 
 const app = express()
 const port = 6200
@@ -16,10 +17,15 @@ app.listen(port, () => {
 	registerFont(`${FONT_PATH}/roboto-medium.ttf`, { family: 'Roboto' })
 })
 
+const corsOptions = {
+	origin: 'https://hammertime.studio',
+	optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
 export type StatsRequestParams = { streamer: string; type: Type }
 type StatsRequest = Request<StatsRequestParams>
 
-app.get('/streams', async (req: StatsRequest, res: Response) => {
+app.get('/streams', cors(corsOptions), async (req: StatsRequest, res: Response) => {
 	logger.info(`New "${req.method}" request from "${req.ip}" via url "${req.url}"`)
 
 	try {
@@ -37,7 +43,7 @@ app.get('/streams', async (req: StatsRequest, res: Response) => {
 	}
 })
 
-app.get('/:streamer/:type', async (req: StatsRequest, res: Response) => {
+app.get('/:streamer/:type', cors(corsOptions), async (req: StatsRequest, res: Response) => {
 	logger.info(`New "${req.method}" request from "${req.ip}" via url "${req.url}"`)
 
 	try {

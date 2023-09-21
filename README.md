@@ -23,10 +23,27 @@ A REST API to generate reports for Charity Royale streamers
 > | `400`     | `text/html`  | `-`      |
 > | `500`     | `text/html`  | `-`      |
 
+## get active livestreams
+
+<code>GET</code> <code><b>/</b></code> <code>(returns a dataset of active twitch streams)</code>
+
+##### Parameters
+
+> | name     | type     | data type | description                                                                                                                                                                                                  |
+> | -------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+> | channels | required | string    | returns an array of livestreams that are currently streaming, format: https://dev.twitch.tv/docs/api/reference/#get-channel-information, if the livestream is not live it will not be in he response dataset |
+
+##### Responses
+
+> | http code | content-type       | response |
+> | --------- | ------------------ | -------- |
+> | `200`     | `application/json` | `-`      |
+> | `500`     | `text/html`        | `-`      |
+
 ##### Example cURL
 
 > ```javascript
->  curl -X GET http://localhost:3000/veni/twitter
+>  curl -X GET http://localhost:3000/streams?channels=asdf1,asdf2,asdf3
 > ```
 
 # env variables

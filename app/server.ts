@@ -2,11 +2,10 @@ import 'dotenv/config'
 import express, { Request, Response } from 'express'
 import { registerFont } from 'canvas'
 import { draw } from './src/draw/draw'
-import { MakeAWishStreamer, fetchMakeAWishData } from './src/apiClients/mawApiClient'
+import { fetchMakeAWishData } from './src/apiClients/mawApiClient'
 import { FONT_PATH } from './src/config'
 import { logger } from './logger'
-import { fetchTwitchUser, downloadAndSaveImageFromUrl } from './src/apiClients/twitchApiClient'
-import { infojson } from './src/info'
+import { fetchTwitchUser, downloadAndSaveImageFromUrl, fetchLiveChannels } from './src/apiClients/twitchApiClient'
 import { Type, hasValidRequestParams } from './src/utils'
 
 const app = express()
@@ -19,6 +18,24 @@ app.listen(port, () => {
 
 export type StatsRequestParams = { streamer: string; type: Type }
 type StatsRequest = Request<StatsRequestParams>
+
+app.get('/streams', async (req: StatsRequest, res: Response) => {
+	logger.info(`New "${req.method}" request from "${req.ip}" via url "${req.url}"`)
+
+	try {
+		if (!req.query.channels) {
+			throw new Error('missing channels params or empty array or wrong data format')
+		}
+		const userLogins = (req.query.channels as string).split(',').join('&user_login=')
+		const livestreams = await fetchLiveChannels(userLogins)
+		res.status(200).json(livestreams)
+		logger.info(`Returning live streams for charity royale "${req.url}"!`)
+	} catch (error) {
+		console.log(error)
+		logger.error(`Couldn't process request "${req.url}" successfully because "${error}".`)
+		res.status(500).send('The request caused an internal server error.')
+	}
+})
 
 app.get('/:streamer/:type', async (req: StatsRequest, res: Response) => {
 	logger.info(`New "${req.method}" request from "${req.ip}" via url "${req.url}"`)

@@ -16,6 +16,20 @@ export const fetchTwitchUser = async (loginName: string) => {
 	return (await res.json()) as TwitchUsersData
 }
 
+export const fetchLiveChannels = async (userLoginQuery: string) => {
+	const res = await fetch(`https://api.twitch.tv/helix/streams?user_login=${userLoginQuery}`, {
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${process.env.TWITCH_ACCESS_TOKEN}`,
+			'Client-Id': `${process.env.TWITCH_CLIENT_ID}`,
+		},
+	})
+	if (!res.ok) {
+		throw new Error(`HTTP Error ${res.status}: returned bad http status code.`)
+	}
+	return await res.json()
+}
+
 export const downloadAndSaveImageFromUrl = async (
 	downloadUrl: string,
 	outputFileName: string,

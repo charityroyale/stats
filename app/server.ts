@@ -17,7 +17,7 @@ app.listen(port, () => {
 	registerFont(`${FONT_PATH}/roboto-medium.ttf`, { family: 'Roboto' })
 })
 
-const allowlist = ['https://hammertime.studio', 'http://localhost:4040']
+const allowlist = ['https://hammertime.studio', 'https://charityroyale.at']
 const corsOptionsDelegate = (req: any, callback: any) => {
 	var corsOptions
 	if (allowlist.indexOf(req.header('Origin')) !== -1) {

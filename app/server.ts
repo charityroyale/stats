@@ -17,21 +17,12 @@ app.listen(port, () => {
 	registerFont(`${FONT_PATH}/roboto-medium.ttf`, { family: 'Roboto' })
 })
 
-const allowlist = ['https://hammertime.studio', 'https://charityroyale.at']
-const corsOptionsDelegate = (req: any, callback: any) => {
-	var corsOptions
-	if (allowlist.indexOf(req.header('Origin')) !== -1) {
-		corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
-	} else {
-		corsOptions = { origin: false } // disable CORS for this request
-	}
-	callback(null, corsOptions) // callback expects two parameters: error and options
-}
+app.use(cors())
 
 export type StatsRequestParams = { streamer: string; type: Type }
 type StatsRequest = Request<StatsRequestParams>
 
-app.get('/streams', cors(corsOptionsDelegate), async (req: StatsRequest, res: Response) => {
+app.get('/streams', async (req: StatsRequest, res: Response) => {
 	logger.info(`New "${req.method}" request from "${req.ip}" via url "${req.url}"`)
 
 	try {
@@ -49,7 +40,7 @@ app.get('/streams', cors(corsOptionsDelegate), async (req: StatsRequest, res: Re
 	}
 })
 
-app.get('/:streamer/:type', cors(corsOptionsDelegate), async (req: StatsRequest, res: Response) => {
+app.get('/:streamer/:type', async (req: StatsRequest, res: Response) => {
 	logger.info(`New "${req.method}" request from "${req.ip}" via url "${req.url}"`)
 
 	try {

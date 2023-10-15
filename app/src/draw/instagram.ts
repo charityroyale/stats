@@ -1,7 +1,7 @@
 import { loadImage, CanvasRenderingContext2D } from 'canvas'
 import { IMG_DOWNLOADS_PATH } from '../config'
 import { HEADING, drawBackground, drawStats } from './drawUtils'
-import { WHITE, GOLD, IMAGE_PATH_MAW_LOGO, IMAGE_PATH_CR_LOGO } from './theme'
+import { WHITE, GOLD, IMAGE_PATH_MAW_LOGO, IMAGE_PATH_CR_LOGO, IMAGE_PATH_BG_INSTA_PATTERN } from './theme'
 import { DrawData } from './draw'
 
 const fontSizeStatsTitleValues = 52
@@ -20,6 +20,9 @@ export const drawInstagram = async (ctx: CanvasRenderingContext2D, data: DrawDat
 	const stats = data.stats
 
 	drawBackground(ctx)
+	await loadImage(`${IMAGE_PATH_BG_INSTA_PATTERN}`).then((data) => {
+		ctx.drawImage(data, 0, 0, ctx.canvas.width, ctx.canvas.height)
+	})
 	drawHeading(ctx)
 
 	setOriginXToCenter(ctx)
@@ -37,6 +40,10 @@ export const drawInstagram = async (ctx: CanvasRenderingContext2D, data: DrawDat
 			statsGap
 		)
 	}
+
+	await loadImage(IMAGE_PATH_MAW_LOGO).then((data) => {
+		ctx.drawImage(data, 50, ctx.canvas.height - 240, data.width * 0.25, data.height * 0.25)
+	})
 
 	await loadImage(IMAGE_PATH_CR_LOGO).then((data) => {
 		ctx.drawImage(data, -400, ctx.canvas.height - 270, data.width * 0.9, data.height * 0.9)

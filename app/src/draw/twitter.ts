@@ -7,19 +7,24 @@ import { WHITE, GOLD, IMAGE_PATH_CR_LOGO, IMAGE_PATH_MAW_LOGO } from './theme'
 import { CanvasRenderingContext2D } from 'canvas'
 import { DrawData } from './draw'
 
+const templateSlotsForSectionY: { [key: number]: number } = {
+	0: 395,
+	1: 545,
+	2: 700,
+}
+
 const fontSizeStatsValues = 58
 export const drawTwitter = async (ctx: CanvasRenderingContext2D, data: DrawData) => {
-	const { slug, current_donation_sum_net } = data.statsData
+	const streamerName = data.streamerName
+	const stats = data.stats
 
 	drawBackground(ctx)
-
 	drawHeading(ctx)
-	drawStreamerName(ctx, slug.toUpperCase())
+	drawStreamerName(ctx, streamerName.toUpperCase())
 
-	// TODO: add stats type descriminator
-	drawStats(ctx, 100, 395, SUM_TITLE, formatCurrency(current_donation_sum_net), 38, fontSizeStatsValues)
-	drawStats(ctx, 100, 545, TOP_DONORS_TITLE, formatUserWithAmount(data.statsData), 38, fontSizeStatsValues)
-	drawStats(ctx, 100, 700, WISHES_TITLE, formatWishes(data.wishes), 38, fontSizeStatsValues, 68, 400)
+	for (let i = 0; i < 3; i++) {
+		drawStats(ctx, 100, templateSlotsForSectionY[i], stats[i].title, stats[i].value, 38, fontSizeStatsValues, 68, 400)
+	}
 
 	await loadImage(IMAGE_PATH_CR_LOGO).then((data) => {
 		ctx.drawImage(data, 90, ctx.canvas.height - 190, data.width * 0.7, data.height * 0.7)
@@ -29,7 +34,7 @@ export const drawTwitter = async (ctx: CanvasRenderingContext2D, data: DrawData)
 		ctx.drawImage(data, ctx.canvas.width - 400, ctx.canvas.height - 170, data.width * 0.2, data.height * 0.2)
 	})
 
-	await loadImage(`${IMG_DOWNLOADS_PATH}/${slug}.png`).then((data) => {
+	await loadImage(`${IMG_DOWNLOADS_PATH}/${streamerName}.png`).then((data) => {
 		ctx.drawImage(data, 100, 70, 220, 220)
 	})
 }

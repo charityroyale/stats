@@ -1,4 +1,5 @@
 import { MakeAWishStreamerDataResponse } from '../apiClients/mawApiClient'
+import { formatCurrency, formatUserWithAmount, formatWish, formatWishes } from '../utils'
 import { DrawData } from './draw'
 import { WHITE, GOLD, PURPLE } from './theme'
 import { CanvasRenderingContext2D } from 'canvas'
@@ -8,6 +9,7 @@ export const HEADING = 'Charity Royale STATS'
 export const SUM_TITLE = 'Spendensumme'
 export const TOP_DONORS_TITLE = 'Top Spender:in'
 export const WISHES_TITLE = 'Gesammelt für'
+export const WISH_TITLE = 'Gesammelt für'
 
 const defaultGap = 68
 export const drawStats = (
@@ -15,7 +17,7 @@ export const drawStats = (
 	x: number,
 	y: number,
 	title: string,
-	text: string,
+	text: string | string[],
 	titleFontSize: number,
 	valueFontSize: number,
 	gap: number = defaultGap,
@@ -30,7 +32,11 @@ export const drawStats = (
 
 	// Draw multiple lines of text content that contains ", "
 	// and is exceeding max width threshold
-	if (ctx.measureText(text).width > ctx.canvas.width - threshold && text.includes(', ')) {
+	if (Array.isArray(text)) {
+		for (let j = 0; j < text.length; j++) {
+			ctx.fillText(text[j], x, y + gap * (j + 1))
+		}
+	} else if (ctx.measureText(text).width > ctx.canvas.width - threshold && text.includes(', ')) {
 		const lineTexts = text.split(', ')
 
 		let textBlockRows = []
@@ -66,14 +72,38 @@ export const prepareDrawData = (rawData: MakeAWishStreamerDataResponse, wish: st
 	if (wish && wish in rawData.wishes) {
 		return {
 			...drawDataBase,
-			stats: ['DONATION_SUM', 'TOP_DONATOR', 'WISH_KID_NAME'],
-			statsData: rawData.wishes[wish],
+			stats: [
+				{
+					title: SUM_TITLE,
+					value: formatCurrency(rawData.wishes[wish].current_donation_sum_net),
+				},
+				{
+					title: TOP_DONORS_TITLE,
+					value: formatUserWithAmount(rawData.wishes[wish]),
+				},
+				{
+					title: WISH_TITLE,
+					value: formatWish(rawData.wishes[wish]),
+				},
+			],
 		}
 	}
 
 	return {
 		...drawDataBase,
-		stats: ['DONATION_SUM', 'TOP_DONATOR', 'WISH_KID_NAME'],
-		statsData: rawData.streamer,
+		stats: [
+			{
+				title: SUM_TITLE,
+				value: formatCurrency(rawData.streamer.current_donation_sum_net),
+			},
+			{
+				title: TOP_DONORS_TITLE,
+				value: formatUserWithAmount(rawData.streamer),
+			},
+			{
+				title: WISHES_TITLE,
+				value: formatWishes(rawData.wishes),
+			},
+		],
 	}
 }

@@ -46,6 +46,10 @@ export const hasValidRequestParams = (params: StatsRequestParams) => {
 	return !params.streamer || params.streamer.length < 0 || !(params.type !== 'instagram' && params.type !== 'twitter')
 }
 
+export const formatWish = (wish: MakeAWishStreamerWish) => {
+	return [`${wish.wish}`, `${wish.kid_name}`]
+}
+
 export const formatWishes = (wishes: { [wishSlug: string]: MakeAWishStreamerWish }) => {
 	if (Object.keys(wishes).length < 1) {
 		return '-'

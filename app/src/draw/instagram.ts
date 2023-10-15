@@ -16,7 +16,7 @@ const templateSlotsForSectionY: { [key: number]: number } = {
 }
 
 export const drawInstagram = async (ctx: CanvasRenderingContext2D, data: DrawData) => {
-	const streamerName = data.streamerName
+	const streamerName = data.streamerName.toLowerCase()
 	const stats = data.stats
 
 	drawBackground(ctx)
@@ -25,7 +25,6 @@ export const drawInstagram = async (ctx: CanvasRenderingContext2D, data: DrawDat
 	setOriginXToCenter(ctx)
 
 	drawStreamerName(ctx, streamerName.toUpperCase())
-
 	for (let i = 0; i < 3; i++) {
 		drawStats(
 			ctx,

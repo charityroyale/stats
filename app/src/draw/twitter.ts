@@ -15,7 +15,7 @@ const templateSlotsForSectionY: { [key: number]: number } = {
 
 const fontSizeStatsValues = 58
 export const drawTwitter = async (ctx: CanvasRenderingContext2D, data: DrawData) => {
-	const streamerName = data.streamerName
+	const streamerName = data.streamerName.toLowerCase()
 	const stats = data.stats
 
 	drawBackground(ctx)

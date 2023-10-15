@@ -1,3 +1,5 @@
+import { MakeAWishStreamerDataResponse } from '../apiClients/mawApiClient'
+import { DrawData } from './draw'
 import { WHITE, GOLD, PURPLE } from './theme'
 import { CanvasRenderingContext2D } from 'canvas'
 
@@ -54,4 +56,24 @@ export const drawStats = (
 export const drawBackground = (ctx: CanvasRenderingContext2D) => {
 	ctx.fillStyle = PURPLE
 	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+}
+
+export const prepareDrawData = (rawData: MakeAWishStreamerDataResponse, wish: string | undefined): DrawData => {
+	let drawDataBase = {
+		streamerName: rawData.streamer.name,
+		wishes: rawData.wishes,
+	}
+	if (wish && wish in rawData.wishes) {
+		return {
+			...drawDataBase,
+			stats: ['DONATION_SUM', 'TOP_DONATOR', 'WISH_KID_NAME'],
+			statsData: rawData.wishes[wish],
+		}
+	}
+
+	return {
+		...drawDataBase,
+		stats: ['DONATION_SUM', 'TOP_DONATOR', 'WISH_KID_NAME'],
+		statsData: rawData.streamer,
+	}
 }

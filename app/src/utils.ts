@@ -34,12 +34,12 @@ export const formatCurrency = (money: string) => {
 	return currencyFormatter.format(parseFloat(money))
 }
 
-export const formatUserWithAmount = (streamer: MakeAWishStreamer) => {
-	if (!streamer.top_donors || streamer.top_donors.length < 0) {
-		logger.info(`Streamer with slug "${streamer.slug}" does not have any donors in list "top_donors".`)
+export const formatUserWithAmount = (data: MakeAWishStreamerWish | MakeAWishStreamer) => {
+	if (!data.top_donors || data.top_donors.length < 0) {
+		logger.info(`Streamer with slug "${data.slug}" does not have any donors in list "top_donors".`)
 		return '-'
 	}
-	return streamer.top_donors[0].username
+	return data.top_donors[0].username
 }
 
 export const hasValidRequestParams = (params: StatsRequestParams) => {

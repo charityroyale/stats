@@ -8,6 +8,7 @@ import { logger } from './logger'
 import { fetchTwitchUser, downloadAndSaveImageFromUrl, fetchLiveChannels } from './src/apiClients/twitchApiClient'
 import { Type, hasValidRequestParams } from './src/utils'
 import cors from 'cors'
+import { prepareDrawData } from './src/draw/drawUtils'
 
 const app = express()
 const port = 6200
@@ -44,7 +45,7 @@ app.get('/:streamer/:type', async (req: StatsRequest, res: Response) => {
 	logger.info(`New "${req.method}" request from "${req.ip}" via url "${req.url}"`)
 
 	try {
-		const { params } = req
+		const { params, query } = req
 		if (!hasValidRequestParams(params)) {
 			logger.error(`Invalid params for request "${JSON.stringify(params)}". Returning HTTP 400 response.`)
 			return res.status(400).send({
@@ -55,11 +56,12 @@ app.get('/:streamer/:type', async (req: StatsRequest, res: Response) => {
 
 		const { streamer, type } = params
 		const mawStreamerData = await fetchMakeAWishData(streamer)
-
 		const twitchUser = await fetchTwitchUser(streamer)
 		await downloadAndSaveImageFromUrl(twitchUser?.data[0].profile_image_url ?? '', streamer)
 
-		const canvas = await draw(type, mawStreamerData)
+		// TODO: change to DrawData interface
+		const drawData = prepareDrawData(mawStreamerData, query.wish as string)
+		const canvas = await draw(type, drawData)
 		const buffer = canvas.toBuffer('image/png')
 
 		res.set('Content-Type', 'image/png')

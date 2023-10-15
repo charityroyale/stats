@@ -3,7 +3,7 @@ import { IMG_DOWNLOADS_PATH } from '../config'
 import { MakeAWishStreamerDataResponse } from '../apiClients/mawApiClient'
 import { formatCurrency, formatUserWithAmount, formatWishes } from '../utils'
 import { HEADING, SUM_TITLE, TOP_DONORS_TITLE, WISHES_TITLE, drawBackground, drawStats } from './drawUtils'
-import { WHITE, GOLD, IMAGE_PATH_CR_LOGO, IMAGE_PATH_MAW_LOGO } from './theme'
+import { WHITE, GOLD, IMAGE_PATH_CR_LOGO, IMAGE_PATH_MAW_LOGO, IMAGE_PATH_BG_TWITTER_PATTERN } from './theme'
 import { CanvasRenderingContext2D } from 'canvas'
 import { DrawData } from './draw'
 
@@ -19,6 +19,9 @@ export const drawTwitter = async (ctx: CanvasRenderingContext2D, data: DrawData)
 	const stats = data.stats
 
 	drawBackground(ctx)
+	await loadImage(`${IMAGE_PATH_BG_TWITTER_PATTERN}`).then((data) => {
+		ctx.drawImage(data, 0, 0, ctx.canvas.width, ctx.canvas.height)
+	})
 	drawHeading(ctx)
 	drawStreamerName(ctx, streamerName.toUpperCase())
 

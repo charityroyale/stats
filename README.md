@@ -10,10 +10,11 @@ A REST API to generate reports for Charity Royale streamers
 
 ##### Parameters
 
-> | name     | type     | data type                | description                                                        |
-> | -------- | -------- | ------------------------ | ------------------------------------------------------------------ |
-> | streamer | required | string                   | specifies which streamerdata should be used to generate the report |
-> | type     | required | 'instagram' or 'twitter' | specifies in which format the report should be generated           |
+> | name     | type     | data type                | description                                                              |
+> | -------- | -------- | ------------------------ | ------------------------------------------------------------------------ |
+> | streamer | required | string                   | path, specifies which streamerdata should be used to generate the report |
+> | type     | required | 'instagram' or 'twitter' | path, specifies in which format the report should be generated           |
+> | wish     | optional | string                   | queryparam, specifies generation of a specific wish via wishSlug         |
 
 ##### Responses
 

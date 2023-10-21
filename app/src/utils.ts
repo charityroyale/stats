@@ -39,7 +39,7 @@ export const formatUserWithAmount = (data: MakeAWishStreamerWish | MakeAWishStre
 		logger.info(`Streamer with slug "${data.slug}" does not have any donors in list "top_donors".`)
 		return '-'
 	}
-	return data.top_donors[0].username
+	return data.top_donors[0]?.username ?? '-'
 }
 
 export const hasValidRequestParams = (params: StatsRequestParams) => {

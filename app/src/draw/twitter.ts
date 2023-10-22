@@ -6,13 +6,17 @@ import { HEADING, SUM_TITLE, TOP_DONORS_TITLE, WISHES_TITLE, drawBackground, dra
 import { WHITE, GOLD, IMAGE_PATH_CR_LOGO, IMAGE_PATH_MAW_LOGO, IMAGE_PATH_BG_TWITTER_PATTERN } from './theme'
 import { CanvasRenderingContext2D } from 'canvas'
 import { DrawData } from './draw'
+import { resetShadows, setShadows } from './instagram'
 
+const templateSpaceY = 150
+const templateYStart = 375
 const templateSlotsForSectionY: { [key: number]: number } = {
-	0: 395,
-	1: 545,
-	2: 700,
+	0: templateYStart,
+	1: templateYStart + 1 * templateSpaceY,
+	2: templateYStart + 2 * templateSpaceY,
 }
 
+const leftPadding = 70
 const fontSizeStatsValues = 58
 export const drawTwitter = async (ctx: CanvasRenderingContext2D, data: DrawData) => {
 	const streamerName = data.streamerName.toLowerCase()
@@ -26,30 +30,46 @@ export const drawTwitter = async (ctx: CanvasRenderingContext2D, data: DrawData)
 	drawStreamerName(ctx, streamerName.toUpperCase())
 
 	for (let i = 0; i < 3; i++) {
-		drawStats(ctx, 100, templateSlotsForSectionY[i], stats[i].title, stats[i].value, 38, fontSizeStatsValues, 68, 400)
+		drawStats(
+			ctx,
+			leftPadding,
+			templateSlotsForSectionY[i],
+			stats[i].title,
+			stats[i].value,
+			38,
+			fontSizeStatsValues,
+			68,
+			400
+		)
 	}
 
 	await loadImage(IMAGE_PATH_CR_LOGO).then((data) => {
-		ctx.drawImage(data, 90, ctx.canvas.height - 190, data.width * 0.7, data.height * 0.7)
+		ctx.drawImage(data, ctx.canvas.width - 350, ctx.canvas.height - 270, data.width * 0.95, data.height * 0.95)
 	})
 
 	await loadImage(IMAGE_PATH_MAW_LOGO).then((data) => {
-		ctx.drawImage(data, ctx.canvas.width - 400, ctx.canvas.height - 170, data.width * 0.2, data.height * 0.2)
+		ctx.drawImage(data, leftPadding, ctx.canvas.height - 190, data.width * 0.28, data.height * 0.28)
 	})
 
 	await loadImage(`${IMG_DOWNLOADS_PATH}/${streamerName}.png`).then((data) => {
-		ctx.drawImage(data, 100, 70, 220, 220)
+		ctx.shadowColor = 'rgba(0,0,0,0.8)'
+		ctx.shadowBlur = 45
+		ctx.drawImage(data, leftPadding, 70, 220, 220)
+		resetShadows(ctx)
 	})
 }
 
+const headingLeftPadding = 345
 const drawHeading = (ctx: CanvasRenderingContext2D, text = HEADING) => {
 	ctx.fillStyle = WHITE
 	ctx.font = '62px "Roboto"'
-	ctx.fillText(text, 370, 145)
+	ctx.fillText(text, headingLeftPadding, 140)
 }
 
 const drawStreamerName = (ctx: CanvasRenderingContext2D, text: string) => {
 	ctx.fillStyle = GOLD
 	ctx.font = '112px "Roboto"'
-	ctx.fillText(text, 370, 260)
+	setShadows(ctx, 8, 8, 'rgba(0,0,0,0.3)')
+	ctx.fillText(text, headingLeftPadding, 265)
+	resetShadows(ctx)
 }

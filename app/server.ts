@@ -16,6 +16,7 @@ const port = 6200
 app.listen(port, () => {
 	logger.info(`Server started on port ${port}`)
 	registerFont(`${FONT_PATH}/roboto-medium.ttf`, { family: 'Roboto' })
+	registerFont(`${FONT_PATH}/roboto-regular.ttf`, { family: 'Roboto-Regular' })
 })
 
 app.use(cors())

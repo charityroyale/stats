@@ -7,12 +7,14 @@ import { DrawData } from './draw'
 const fontSizeStatsTitleValues = 52
 const fontSizeStatsTextValues = 72
 
-const statsGap = 84
+const statsGap = 95
 
+const templateSpaceY = 235
+const templateYStart = 740
 const templateSlotsForSectionY: { [key: number]: number } = {
-	0: 695,
-	1: 950,
-	2: 1200,
+	0: templateYStart,
+	1: templateYStart + 1 * templateSpaceY,
+	2: templateYStart + 2 * templateSpaceY,
 }
 
 export const drawInstagram = async (ctx: CanvasRenderingContext2D, data: DrawData) => {
@@ -23,7 +25,6 @@ export const drawInstagram = async (ctx: CanvasRenderingContext2D, data: DrawDat
 	await loadImage(`${IMAGE_PATH_BG_INSTA_PATTERN}`).then((data) => {
 		ctx.drawImage(data, 0, 0, ctx.canvas.width, ctx.canvas.height)
 	})
-	drawHeading(ctx)
 
 	setOriginXToCenter(ctx)
 
@@ -41,20 +42,19 @@ export const drawInstagram = async (ctx: CanvasRenderingContext2D, data: DrawDat
 		)
 	}
 
-	await loadImage(IMAGE_PATH_MAW_LOGO).then((data) => {
-		ctx.drawImage(data, 50, ctx.canvas.height - 240, data.width * 0.25, data.height * 0.25)
-	})
-
 	await loadImage(IMAGE_PATH_CR_LOGO).then((data) => {
-		ctx.drawImage(data, -400, ctx.canvas.height - 270, data.width * 0.9, data.height * 0.9)
+		ctx.drawImage(data, -470, ctx.canvas.height - 300, data.width * 1.13, data.height * 1.13)
 	})
 
 	await loadImage(IMAGE_PATH_MAW_LOGO).then((data) => {
-		ctx.drawImage(data, 50, ctx.canvas.height - 240, data.width * 0.25, data.height * 0.25)
+		ctx.drawImage(data, -90, ctx.canvas.height - 270, data.width * 0.33, data.height * 0.33)
 	})
 
 	await loadImage(`${IMG_DOWNLOADS_PATH}/${streamerName}.png`).then((data) => {
+		ctx.shadowColor = 'rgba(0,0,0,0.8)'
+		ctx.shadowBlur = 45
 		ctx.drawImage(data, -150, 120, 300, 300)
+		resetShadows(ctx)
 	})
 }
 
@@ -65,15 +65,36 @@ const setOriginXToCenter = (ctx: CanvasRenderingContext2D) => {
 const drawStreamerName = (ctx: CanvasRenderingContext2D, text: string) => {
 	ctx.fillStyle = GOLD
 	ctx.font = '112px "Roboto"'
+
 	ctx.textAlign = 'center'
-	ctx.fillText(text, 0, 560)
+	setShadows(ctx, 10, 10, 'rgba(0,0,0,0.3)')
+	ctx.fillText(text, 0, 580)
+	resetShadows(ctx)
+}
+
+export const setShadows = (
+	ctx: CanvasRenderingContext2D,
+	offsetX: number,
+	offsetY: number,
+	shadowColor: string = 'rgba(0,0,0,0.5)'
+) => {
+	ctx.shadowOffsetX = offsetX
+	ctx.shadowOffsetY = offsetY
+	ctx.shadowColor = shadowColor
+}
+
+export const resetShadows = (ctx: CanvasRenderingContext2D) => {
+	ctx.shadowOffsetX = 0
+	ctx.shadowOffsetY = 0
+	ctx.shadowColor = ''
+	ctx.shadowBlur = 0
 }
 
 const drawHeading = (ctx: CanvasRenderingContext2D, text = HEADING) => {
 	ctx.fillStyle = WHITE
-	ctx.font = '62px "Roboto"'
+	ctx.font = '42px "Roboto"'
 	ctx.save()
-	ctx.translate(100, 400)
+	ctx.translate(70, 560)
 	ctx.rotate(-Math.PI / 2)
 	ctx.textAlign = 'center'
 	ctx.fillText(text, 0, 0)

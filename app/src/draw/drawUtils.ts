@@ -1,6 +1,7 @@
 import { MakeAWishStreamerDataResponse } from '../apiClients/mawApiClient'
 import { formatCurrency, formatUserWithAmount, formatWish, formatWishes } from '../utils'
 import { DrawData } from './draw'
+import { setShadows, resetShadows } from './instagram'
 import { WHITE, GOLD, PURPLE } from './theme'
 import { CanvasRenderingContext2D } from 'canvas'
 
@@ -21,7 +22,7 @@ export const drawStats = (
 	titleFontSize: number,
 	valueFontSize: number,
 	gap: number = defaultGap,
-	threshold: number = 200
+	threshold: number = 350
 ) => {
 	ctx.fillStyle = WHITE
 	ctx.font = `${titleFontSize}px Roboto`
@@ -30,6 +31,7 @@ export const drawStats = (
 	ctx.fillStyle = GOLD
 	ctx.font = `${valueFontSize}px Roboto`
 
+	setShadows(ctx, 6, 6, 'rgba(0,0,0,0.3)')
 	// Draw multiple lines of text content that contains ", "
 	// and is exceeding max width threshold
 	if (Array.isArray(text)) {
@@ -57,6 +59,7 @@ export const drawStats = (
 	} else {
 		ctx.fillText(text, x, y + gap)
 	}
+	resetShadows(ctx)
 }
 
 export const drawBackground = (ctx: CanvasRenderingContext2D) => {

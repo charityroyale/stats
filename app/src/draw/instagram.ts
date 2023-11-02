@@ -38,7 +38,8 @@ export const drawInstagram = async (ctx: CanvasRenderingContext2D, data: DrawDat
 			stats[i].value,
 			fontSizeStatsTitleValues,
 			fontSizeStatsTextValues,
-			statsGap
+			statsGap,
+			200
 		)
 	}
 
@@ -88,15 +89,4 @@ export const resetShadows = (ctx: CanvasRenderingContext2D) => {
 	ctx.shadowOffsetY = 0
 	ctx.shadowColor = ''
 	ctx.shadowBlur = 0
-}
-
-const drawHeading = (ctx: CanvasRenderingContext2D, text = HEADING) => {
-	ctx.fillStyle = WHITE
-	ctx.font = '42px "Roboto"'
-	ctx.save()
-	ctx.translate(70, 560)
-	ctx.rotate(-Math.PI / 2)
-	ctx.textAlign = 'center'
-	ctx.fillText(text, 0, 0)
-	ctx.restore()
 }

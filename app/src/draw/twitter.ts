@@ -39,12 +39,12 @@ export const drawTwitter = async (ctx: CanvasRenderingContext2D, data: DrawData)
 			38,
 			fontSizeStatsValues,
 			68,
-			400
+			200
 		)
 	}
 
 	await loadImage(IMAGE_PATH_CR_LOGO).then((data) => {
-		ctx.drawImage(data, ctx.canvas.width - 350, ctx.canvas.height - 270, data.width * 0.95, data.height * 0.95)
+		ctx.drawImage(data, ctx.canvas.width - 350, ctx.canvas.height - 235, data.width * 0.95, data.height * 0.95)
 	})
 
 	await loadImage(IMAGE_PATH_MAW_LOGO).then((data) => {

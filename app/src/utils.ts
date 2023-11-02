@@ -47,7 +47,7 @@ export const hasValidRequestParams = (params: StatsRequestParams) => {
 }
 
 export const formatWish = (wish: MakeAWishStreamerWish) => {
-	return [`${wish.wish}`, `${wish.kid_name}`]
+	return [`${wish.wish}`, `${wish.kid_name ?? wish.slug}`]
 }
 
 export const formatWishes = (wishes: { [wishSlug: string]: MakeAWishStreamerWish }) => {
@@ -57,10 +57,10 @@ export const formatWishes = (wishes: { [wishSlug: string]: MakeAWishStreamerWish
 
 	const wishKeys = Object.keys(wishes)
 	if (wishKeys.length === 1) {
-		return wishes[wishKeys[0]].kid_name ?? wishes[wishKeys[0]].wish
+		return wishes[wishKeys[0]].kid_name ?? wishes[wishKeys[0]].wish ?? wishes[wishKeys[0]].slug
 	}
 
-	const kidNames = wishKeys.map((key) => wishes[key].kid_name).join(', ')
+	const kidNames = wishKeys.map((key) => wishes[key].kid_name ?? wishes[key].slug).join(', ')
 
 	return kidNames.slice(0, kidNames.lastIndexOf(', '))
 }

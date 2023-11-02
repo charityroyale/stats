@@ -32,12 +32,14 @@ export const drawStats = (
 	ctx.font = `${valueFontSize}px Roboto`
 
 	setShadows(ctx, 6, 6, 'rgba(0,0,0,0.3)')
-	// Draw multiple lines of text content that contains ", "
-	// and is exceeding max width threshold
+	// Special case for single wishes to have double rows with the wish and the associated kid in next row
 	if (Array.isArray(text)) {
 		for (let j = 0; j < text.length; j++) {
 			ctx.fillText(text[j], x, y + gap * (j + 1))
 		}
+
+		// Draw multiple lines of text content that contains ", "
+		// and is exceeding max width threshold
 	} else if (ctx.measureText(text).width > ctx.canvas.width - threshold && text.includes(', ')) {
 		const lineTexts = text.split(', ')
 
@@ -45,7 +47,7 @@ export const drawStats = (
 		let textToDraw = ''
 
 		for (let i = 0; i < lineTexts.length; i++) {
-			if (ctx.measureText(textToDraw).width >= ctx.canvas.width - threshold) {
+			if (ctx.measureText(textToDraw).width + ctx.measureText(lineTexts[i]).width >= ctx.canvas.width - threshold) {
 				textBlockRows.push(textToDraw)
 				textToDraw = ''
 			}

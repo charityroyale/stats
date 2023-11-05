@@ -59,17 +59,17 @@ export const drawTwitter = async (ctx: CanvasRenderingContext2D, data: DrawData)
 	})
 }
 
-const headingLeftPadding = 345
+const headingLeftPadding = 340
 const drawHeading = (ctx: CanvasRenderingContext2D, text = HEADING) => {
 	ctx.fillStyle = WHITE
 	ctx.font = '62px "Roboto"'
-	ctx.fillText(text, headingLeftPadding, 140)
+	ctx.fillText(text, headingLeftPadding, 155)
 }
 
 const drawStreamerName = (ctx: CanvasRenderingContext2D, text: string) => {
 	ctx.fillStyle = GOLD
-	ctx.font = '112px "Roboto"'
+	ctx.font = '78px "Roboto"'
 	setShadows(ctx, 8, 8, 'rgba(0,0,0,0.3)')
-	ctx.fillText(text, headingLeftPadding, 265)
+	ctx.fillText(text, headingLeftPadding, 255)
 	resetShadows(ctx)
 }

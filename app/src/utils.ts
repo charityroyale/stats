@@ -62,5 +62,5 @@ export const formatWishes = (wishes: { [wishSlug: string]: MakeAWishStreamerWish
 
 	const kidNames = wishKeys.map((key) => wishes[key].kid_name ?? wishes[key].slug).join(', ')
 
-	return kidNames.slice(0, kidNames.lastIndexOf(', '))
+	return kidNames
 }

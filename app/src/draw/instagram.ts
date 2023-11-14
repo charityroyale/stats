@@ -30,6 +30,21 @@ export const drawInstagram = async (ctx: CanvasRenderingContext2D, data: DrawDat
 
 	drawStreamerName(ctx, streamerName.toUpperCase())
 	for (let i = 0; i < 3; i++) {
+		if (streamerName.toUpperCase() === 'PAPAPLATTE' && i === 2) {
+			drawStats(
+				ctx,
+				0,
+				templateSlotsForSectionY[i],
+				stats[i].title,
+				stats[i].value,
+				fontSizeStatsTitleValues,
+				48,
+				64,
+				200
+			)
+			break
+		}
+
 		drawStats(
 			ctx,
 			0,

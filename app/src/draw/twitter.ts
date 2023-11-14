@@ -30,6 +30,10 @@ export const drawTwitter = async (ctx: CanvasRenderingContext2D, data: DrawData)
 	drawStreamerName(ctx, streamerName.toUpperCase())
 
 	for (let i = 0; i < 3; i++) {
+		if (streamerName.toUpperCase() === 'PAPAPLATTE' && i === 2) {
+			drawStats(ctx, leftPadding, templateSlotsForSectionY[i], stats[i].title, stats[i].value, 38, 32, 48, 200)
+			break
+		}
 		drawStats(
 			ctx,
 			leftPadding,

@@ -40,10 +40,11 @@ export const formatUserWithAmount = (data: MakeAWishStreamerWish | MakeAWishStre
 		return '-'
 	}
 
-	const topDonor = data.top_donors[0]?.username ?? '-'
-	return topDonor.toLowerCase() === 'papaplatte'
-		? data.top_donors[1]?.username ?? '-'
-		: data.top_donors[0]?.username ?? '-'
+	const allowedTopDonors = data.top_donors.filter(
+		(donor) => donor.username.toLowerCase() !== 'papaplatte' && donor.username.toLowerCase() !== 'dhalucard community'
+	)
+	const topDonor = allowedTopDonors[0]?.username ?? '-'
+	return topDonor
 }
 
 export const hasValidRequestParams = (params: StatsRequestParams) => {

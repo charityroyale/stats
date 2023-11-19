@@ -11,7 +11,8 @@ export const fetchTwitchUser = async (loginName: string) => {
 		},
 	})
 	if (!res.ok) {
-		throw new Error(`HTTP Error ${res.status}: returned bad http status code for user "${loginName}".`)
+		logger.error(`fetchTwitchUser: HTTP Error ${res.status}: returned bad http status code for user "${loginName}".`)
+		return null
 	}
 	return (await res.json()) as TwitchUsersData
 }
@@ -25,7 +26,8 @@ export const fetchLiveChannels = async (userLoginQuery: string) => {
 		},
 	})
 	if (!res.ok) {
-		throw new Error(`HTTP Error ${res.status}: returned bad http status code.`)
+		logger.error(`fetchLiveChannels: HTTP Error ${res.status}: returned bad http status code.`)
+		throw new Error(`fetchLiveChannels: HTTP Error ${res.status}: returned bad http status code.`)
 	}
 	return await res.json()
 }

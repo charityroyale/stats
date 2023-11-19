@@ -32,17 +32,13 @@ export const fetchLiveChannels = async (userLoginQuery: string) => {
 	return await res.json()
 }
 
-export const downloadAndSaveImageFromUrl = async (
-	downloadUrl: string,
-	outputFileName: string,
-	outputPath: string = IMG_DOWNLOADS_PATH
-): Promise<void> => {
+export const downloadAndSaveImageFromUrl = async (downloadUrl: string, outputFileName: string): Promise<void> => {
 	if (downloadUrl.length < 0) {
 		logger.info(`DownloadUrl for "${outputFileName}" is empty string.`)
 		return
 	}
 
-	const destination = `${outputPath}/${outputFileName}.png`
+	const destination = `${IMG_DOWNLOADS_PATH}/${outputFileName}.png`
 	if (fs.existsSync(destination)) {
 		logger.info(`Canceling image download. The following file already exists: "${destination}"`)
 		return

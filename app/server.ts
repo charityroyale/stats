@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import * as fs from 'fs'
-import express, { Request, Response } from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import { registerFont } from 'canvas'
 import { draw } from './src/draw/draw'
 import { fetchMakeAWishData } from './src/apiClients/mawApiClient'
@@ -10,9 +10,11 @@ import { fetchTwitchUser, downloadAndSaveImageFromUrl, fetchLiveChannels } from 
 import { Type, hasValidRequestParams } from './src/utils'
 import cors from 'cors'
 import { prepareDrawData } from './src/draw/drawUtils'
+import NodeCache from 'node-cache'
 
 const app = express()
 const port = 6200
+const cache = new NodeCache({ stdTTL: 300 })
 
 app.listen(port, () => {
 	logger.info(`Server started on port ${port}`)
@@ -25,7 +27,19 @@ app.use(cors())
 export type StatsRequestParams = { streamer: string; type: Type }
 type StatsRequest = Request<StatsRequestParams>
 
-app.get('/streams', async (req: StatsRequest, res: Response) => {
+const cacheMiddleware = (req: Request, res: Response, next: NextFunction) => {
+	const key = req.originalUrl
+
+	const cachedData = cache.get(key)
+	if (cachedData) {
+		logger.info(`Returning data cache for key ${req.originalUrl}`)
+		return res.json(cachedData)
+	}
+
+	next()
+}
+
+app.get('/streams', cacheMiddleware, async (req: StatsRequest, res: Response) => {
 	logger.info(`New "${req.method}" request from "${req.ip}" via url "${req.url}"`)
 
 	try {
@@ -34,6 +48,7 @@ app.get('/streams', async (req: StatsRequest, res: Response) => {
 		}
 		const userLogins = (req.query.channels as string).split(',').join('&user_login=')
 		const livestreams = await fetchLiveChannels(userLogins)
+		cache.set(req.originalUrl, livestreams)
 		res.status(200).json(livestreams)
 		logger.info(`Returning live streams for charity royale "${req.url}"!`)
 	} catch (error) {

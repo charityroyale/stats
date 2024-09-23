@@ -1,5 +1,4 @@
 import { Canvas, createCanvas } from 'canvas'
-import { Response } from 'express'
 import { logger } from '../logger'
 import { StatsRequestParams } from '../server'
 import { MakeAWishStreamer, MakeAWishStreamerWish } from './apiClients/mawApiClient'
@@ -31,7 +30,7 @@ export const currencyFormatter = Intl.NumberFormat('de-AT', {
 })
 
 export const formatCurrency = (money: string) => {
-	return currencyFormatter.format(parseFloat(money))
+	return currencyFormatter.format(parseFloat(money) / 100)
 }
 
 export const formatUserWithAmount = (data: MakeAWishStreamerWish | MakeAWishStreamer) => {

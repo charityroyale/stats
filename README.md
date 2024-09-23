@@ -44,7 +44,7 @@ A REST API to generate reports for Charity Royale streamers
 ##### Example cURL
 
 > ```javascript
->  curl -X GET http://localhost:3000/streams?channels=asdf1,asdf2,asdf3
+>  curl -X GET http://localhost:6200/streams?channels=asdf1,asdf2,asdf3
 > ```
 
 # env variables

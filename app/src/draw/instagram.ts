@@ -1,7 +1,7 @@
 import { loadImage, CanvasRenderingContext2D } from 'canvas'
 import { IMG_DOWNLOADS_PATH } from '../config'
-import { HEADING, drawBackground, drawStats } from './drawUtils'
-import { WHITE, GOLD, IMAGE_PATH_MAW_LOGO, IMAGE_PATH_CR_LOGO, IMAGE_PATH_BG_INSTA_PATTERN } from './theme'
+import { drawBackground, drawStats } from './drawUtils'
+import { GOLD, IMAGE_PATH_MAW_LOGO, IMAGE_PATH_CR_LOGO, IMAGE_PATH_BG_INSTA_PATTERN } from './theme'
 import { DrawData } from './draw'
 
 const fontSizeStatsTitleValues = 52

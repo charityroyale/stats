@@ -1,6 +1,5 @@
 # define nodejs baseimage
-FROM node:18.15.0
-
+FROM node:20.17.0
 # expose ports
 EXPOSE 6200
 

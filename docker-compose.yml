@@ -7,15 +7,15 @@ services:
       dockerfile: Dockerfile
     image: charityroyale/stats
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.charityroyale-stats.rule=Host(`stats.hammertime.studio`)"
-      - "traefik.http.routers.charityroyale-stats.entrypoints=websecure"
-      - "traefik.http.routers.charityroyale-stats.tls.certresolver=myresolver"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.charityroyale-stats.rule=Host(`stats.hammertime.studio`)'
+      - 'traefik.http.routers.charityroyale-stats.entrypoints=websecure'
+      - 'traefik.http.routers.charityroyale-stats.tls.certresolver=myresolver'
     networks:
-      internal:
+      - internal
     restart: always
 
 networks:
   internal:
-    external:
-      name: paddy_internal
+    name: 'paddy_internal'
+    external: true

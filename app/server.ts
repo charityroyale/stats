@@ -45,7 +45,7 @@ app.get('/streams', cacheMiddleware, async (req: StatsRequest, res: Response) =>
 	try {
 		if (!req.query.channels) {
 			// throw new Error('missing channels params or empty array or wrong data format')
-			return res.status(200).send('Silence is key.')
+			return res.status(400).send('Silence is key.')
 		}
 		const userLogins = (req.query.channels as string).split(',').join('&user_login=')
 		const livestreams = await fetchLiveChannels(userLogins)

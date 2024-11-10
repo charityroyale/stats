@@ -1,5 +1,5 @@
-import { MakeAWishStreamerDataResponse } from '../apiClients/mawApiClient'
-import { formatCurrency, formatUserWithAmount, formatWish, formatWishes } from '../utils'
+import { MakeAWishInfoJsonDTO, MakeAWishStreamerDataResponse } from '../apiClients/mawApiClient'
+import { formatCurrency, formatUserWithAmount, formatWish, formatWishes, isMultiStream } from '../utils'
 import { DrawData } from './draw'
 import { setShadows, resetShadows } from './instagram'
 import { WHITE, GOLD, PURPLE } from './theme'
@@ -69,18 +69,31 @@ export const drawBackground = (ctx: CanvasRenderingContext2D) => {
 	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 }
 
-export const prepareDrawData = (rawData: MakeAWishStreamerDataResponse, wish: string | undefined): DrawData => {
+export const prepareDrawData = (
+	rawData: MakeAWishStreamerDataResponse,
+	wish: string | undefined,
+	mawInfoJson: null | MakeAWishInfoJsonDTO
+): DrawData => {
+	const multiStreamers = isMultiStream(rawData.streamer.name)
+
 	let drawDataBase = {
 		streamerName: rawData.streamer.name,
 		wishes: rawData.wishes,
 	}
+
 	if (wish && wish in rawData.wishes) {
+		let SUM_VALUE_SINGLE_WISH = formatCurrency(rawData.wishes[wish].current_donation_sum_net)
+
+		if (mawInfoJson?.streamers && multiStreamers) {
+			SUM_VALUE_SINGLE_WISH = formatCurrency(mawInfoJson.wishes[wish].current_donation_sum_net.toString())
+		}
+
 		return {
 			...drawDataBase,
 			stats: [
 				{
 					title: SUM_TITLE,
-					value: formatCurrency(rawData.wishes[wish].current_donation_sum_net),
+					value: SUM_VALUE_SINGLE_WISH,
 				},
 				{
 					title: TOP_DONORS_TITLE,
@@ -94,12 +107,21 @@ export const prepareDrawData = (rawData: MakeAWishStreamerDataResponse, wish: st
 		}
 	}
 
+	let SUM_VALUE = formatCurrency(rawData.streamer.current_donation_sum_net)
+	if (mawInfoJson?.streamers && multiStreamers) {
+		let sum = 0
+		for (let streamer of multiStreamers) {
+			sum += Number(mawInfoJson.streamers[streamer].current_donation_sum_net)
+		}
+		SUM_VALUE = formatCurrency(sum.toString())
+	}
+
 	return {
 		...drawDataBase,
 		stats: [
 			{
 				title: SUM_TITLE,
-				value: formatCurrency(rawData.streamer.current_donation_sum_net),
+				value: SUM_VALUE,
 			},
 			{
 				title: TOP_DONORS_TITLE,

@@ -68,3 +68,15 @@ export const formatWishes = (wishes: { [wishSlug: string]: MakeAWishStreamerWish
 
 	return kidNames
 }
+
+const multiStreams = [
+	['icyvace', 'cherryylein'],
+	['xmrcr4zy', 's0ulrider'],
+	['stephantschany', 'yourhostlaura'],
+]
+
+export const isMultiStream = (streamer: string) => {
+	const lowercasedStreamer = streamer.toLowerCase()
+	const foundMultiStream = multiStreams.find((pair) => pair.includes(lowercasedStreamer))
+	return foundMultiStream || null
+}

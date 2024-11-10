@@ -14,5 +14,6 @@ export const draw = async (type: Type, data: DrawData) => {
 
 export interface DrawData {
 	streamerName: string
+	multiStreamers: string[] | undefined
 	stats: { title: string; value: string | string[] }[]
 }

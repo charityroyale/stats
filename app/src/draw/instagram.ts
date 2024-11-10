@@ -29,6 +29,10 @@ export const drawInstagram = async (ctx: CanvasRenderingContext2D, data: DrawDat
 	setOriginXToCenter(ctx)
 
 	drawStreamerName(ctx, streamerName.toUpperCase())
+	if (data.multiStreamers) {
+		drawMultiStreamers(ctx, `mit ${data.multiStreamers?.join(',')}`)
+	}
+
 	for (let i = 0; i < 3; i++) {
 		if (streamerName.toUpperCase() === 'PAPAPLATTE' && i === 2) {
 			drawStats(
@@ -85,6 +89,16 @@ const drawStreamerName = (ctx: CanvasRenderingContext2D, text: string) => {
 	ctx.textAlign = 'center'
 	setShadows(ctx, 10, 10, 'rgba(0,0,0,0.3)')
 	ctx.fillText(text, 0, 580)
+	resetShadows(ctx)
+}
+
+const drawMultiStreamers = (ctx: CanvasRenderingContext2D, text: string) => {
+	ctx.fillStyle = GOLD
+	ctx.font = '42px "Roboto"'
+
+	ctx.textAlign = 'center'
+	setShadows(ctx, 10, 10, 'rgba(0,0,0,0.3)')
+	ctx.fillText(text, 0, 645)
 	resetShadows(ctx)
 }
 

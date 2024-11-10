@@ -27,6 +27,10 @@ export const drawTwitter = async (ctx: CanvasRenderingContext2D, data: DrawData)
 	drawHeading(ctx)
 	drawStreamerName(ctx, streamerName.toUpperCase())
 
+	if (data.multiStreamers) {
+		drawMultiStreamers(ctx, `mit ${data.multiStreamers?.join(',')}`)
+	}
+
 	for (let i = 0; i < 3; i++) {
 		if (streamerName.toUpperCase() === 'PAPAPLATTE' && i === 2) {
 			drawStats(ctx, leftPadding, templateSlotsForSectionY[i], stats[i].title, stats[i].value, 38, 32, 48, 200)
@@ -73,5 +77,13 @@ const drawStreamerName = (ctx: CanvasRenderingContext2D, text: string) => {
 	ctx.font = '78px "Roboto"'
 	setShadows(ctx, 8, 8, 'rgba(0,0,0,0.3)')
 	ctx.fillText(text, headingLeftPadding, 255)
+	resetShadows(ctx)
+}
+
+const drawMultiStreamers = (ctx: CanvasRenderingContext2D, text: string) => {
+	ctx.fillStyle = GOLD
+	ctx.font = '32px "Roboto"'
+	setShadows(ctx, 8, 8, 'rgba(0,0,0,0.3)')
+	ctx.fillText(text, headingLeftPadding, 305)
 	resetShadows(ctx)
 }

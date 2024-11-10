@@ -78,6 +78,7 @@ export const prepareDrawData = (
 
 	let drawDataBase = {
 		streamerName: rawData.streamer.name,
+		multiStreamers: multiStreamers?.filter((name) => name !== rawData.streamer.name.toLowerCase()),
 		wishes: rawData.wishes,
 	}
 

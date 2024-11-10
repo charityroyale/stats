@@ -49,6 +49,21 @@ export const drawInstagram = async (ctx: CanvasRenderingContext2D, data: DrawDat
 			break
 		}
 
+		if (streamerName.toLowerCase() === 'castcrafter' && i === 2) {
+			drawStats(
+				ctx,
+				0,
+				templateSlotsForSectionY[i],
+				stats[i].title,
+				stats[i].value,
+				fontSizeStatsTitleValues,
+				40,
+				64,
+				200
+			)
+			break
+		}
+
 		drawStats(
 			ctx,
 			0,

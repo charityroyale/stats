@@ -73,8 +73,9 @@ const multiStreams = [
 	['icyvace', 'cherryylein'],
 	['xmrcr4zy', 's0ulrider'],
 	['stephantschany', 'yourhostlaura'],
+	['lunarie_ttv', 'jens'],
+	['shillingplays', 'bxrbiex'],
 ]
-
 export const isMultiStream = (streamer: string) => {
 	const lowercasedStreamer = streamer.toLowerCase()
 	const foundMultiStream = multiStreams.find((pair) => pair.includes(lowercasedStreamer))

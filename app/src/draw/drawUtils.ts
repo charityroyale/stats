@@ -71,14 +71,15 @@ export const drawBackground = (ctx: CanvasRenderingContext2D) => {
 
 export const prepareDrawData = (
 	rawData: MakeAWishStreamerDataResponse,
+	streamer: string,
 	wish: string | undefined,
 	mawInfoJson: null | MakeAWishInfoJsonDTO
 ): DrawData => {
-	const multiStreamers = isMultiStream(rawData.streamer.name)
+	const multiStreamers = isMultiStream(streamer)
 
 	let drawDataBase = {
-		streamerName: rawData.streamer.name,
-		multiStreamers: multiStreamers?.filter((name) => name !== rawData.streamer.name.toLowerCase()),
+		streamerName: streamer,
+		multiStreamers: multiStreamers?.filter((name) => name !== streamer.toLowerCase()),
 		wishes: rawData.wishes,
 	}
 

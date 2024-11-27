@@ -86,7 +86,7 @@ app.get('/:streamer/:type', async (req: StatsRequest, res: Response) => {
 			await downloadAndSaveImageFromUrl(twitchUser?.data[0].profile_image_url ?? '', streamer)
 		}
 		// TODO: change to DrawData interface
-		const drawData = prepareDrawData(mawStreamerData, query.wish as string, mawInfoJson)
+		const drawData = prepareDrawData(mawStreamerData, streamer, query.wish as string, mawInfoJson)
 		const canvas = await draw(type, drawData)
 		const buffer = canvas.toBuffer('image/png')
 
